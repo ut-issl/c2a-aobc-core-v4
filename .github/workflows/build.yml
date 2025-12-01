@@ -10,12 +10,11 @@ on:
 
 jobs:
   build:
-    uses: ut-issl/c2a-workflows/.github/workflows/build.yml@092c8dff10cf5eb6d3af4c3b47bc5b57fe07e633
+    uses: arkedge/workflows-c2a/.github/workflows/build.yml@092c8dff10cf5eb6d3af4c3b47bc5b57fe07e633 # v5.4.0
     with:
       c2a_dir: .
       build_msvc: false  #Build (as C++) for win32 By MSVC++
       build_as_cxx: true
-      sils_mockup: false
       c2a_custom_setup: |
         echo "Current dir:"
         pwd
