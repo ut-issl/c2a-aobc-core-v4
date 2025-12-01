@@ -15,6 +15,7 @@ jobs:
       c2a_dir: .
       build_msvc: false  #Build (as C++) for win32 By MSVC++
       build_as_cxx: true
+      sils_mockup: false
       c2a_custom_setup: |
         echo "Current dir:"
         pwd
