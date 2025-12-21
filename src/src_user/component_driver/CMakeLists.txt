@@ -16,6 +16,10 @@ set(C2A_SRCS
   # Power/ina260.c
 )
 
+if(C2A_BUILD_AS_CXX)
+  set_source_files_properties(${C2A_SRCS} PROPERTIES LANGUAGE CXX)  # C++
+endif()
+
 add_library(${PROJECT_NAME} OBJECT ${C2A_SRCS})
 
 include(${C2A_USER_DIR}/common.cmake)
