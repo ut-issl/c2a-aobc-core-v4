@@ -1,55 +1,50 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
+project(C2A_USER_HAL)
 
-project(C2A_USER_IF_WRAPPER)
-
-set(C2A_SRCS_COMMON
-  if_list.c
+set(C2A_COMMON_SRCS
+  
 )
 
-if(BUILD_C2A_AS_SILS_FW)
-  set(C2A_SILS_SRCS
-    Sils/uart_sils.cpp
-    Sils/i2c_sils.c
-    Sils/spi_sils.c
-    Sils/adc_sils.c
-    Sils/wdt_sils.c
-    Sils/gpio_sils.c
+# 通常，S2EではC++ビルドされるが，C2A core開発のため，C2A単体をC89でライブラリビルドする場合は，mockupをビルド対象にする
+if(C2A_BUILD_WITH_SILS_MOCKUP)
+  message("USE SILS_MOCKUP")
+
+  #target_sources(${PROJECT_NAME} PRIVATE
+  set(C2A_HAL_IMPL_SRCS
+    sils_mockup/i2c_sils.c
+    sils_mockup/uart_sils.c
+    sils_mockup/wdt_sils.c
+  )
+else()
+  #target_sources(${PROJECT_NAME} PUBLIC
+  set(C2A_HAL_IMPL_COMMON_SRCS
+    sils/i2c_sils.cpp  
+    sils/uart_sils.cpp
+    sils/wdt_sils.cpp
   )
 
-  if(USE_UART_COM)
-    add_definitions(-DUSE_UART_COM)
-    list(APPEND C2A_SILS_SRCS
-      Sils/com_port.cpp
+  if(C2A_USE_SCI_COM_WINGS) # option 名が confusing だが，subobc の upstream（単体試験では WINGS と疎通するポート）は UART
+    add_definitions(-DUSE_SCI_COM_WINGS)
+    #target_sources(${PROJECT_NAME} PUBLIC
+    set(C2A_HAL_COM_UART_SRCS
+      sils/uart_sils_sci_if.cpp
     )
-    message("Use UART COM")
+    message("USE SCI_COM_UART")
   endif()
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "pic32mx")
-  # 実機 向け IfWrapper 実装
-  set(C2A_PIC_SRCS
-    COMMON/WDT_TEMP.c
-    Arduino/CHIPKIT/ADC_CHIPKIT.cpp
-    Arduino/CHIPKIT/GPIO_CHIPKIT.cpp
-    Arduino/CHIPKIT/I2C_CHIPKIT.cpp
-    Arduino/CHIPKIT/spi_chipkit.cpp
-    Arduino/CHIPKIT/UART_CHIPKIT.cpp
-    Arduino/ADC_ARDUINO.c
-    Arduino/GPIO_ARDUINO.c
-    Arduino/I2C_ARDUINO.c
-    Arduino/spi_arduino.c
-    Arduino/UART_ARDUINO.c
+
+  set(C2A_HAL_IMPL_SRCS
+    ${C2A_HAL_IMPL_COMMON_SRCS}
+    ${C2A_HAL_COM_UART_SRCS}
   )
 endif()
 
 set(C2A_SRCS
-  ${C2A_SRCS_COMMON}
-  ${C2A_SILS_SRCS}
-  ${C2A_PIC_SRCS}
+  ${C2A_COMMON_SRCS}
+  ${C2A_HAL_IMPL_SRCS}
 )
 
-if(BUILD_C2A_AS_CXX)
+if(C2A_BUILD_AS_CXX)
   set_source_files_properties(${C2A_SRCS} PROPERTIES LANGUAGE CXX)  # C++
 endif()
 
