@@ -4,7 +4,7 @@
 * @brief MOBC の DI. MOBC における GS との DI に相当する
 */
 
-#include "di_mobc.h"
+#include "i_mobc.h"
 #include <src_core/TlmCmd/packet_handler.h>
 #include <src_core/Library/print.h>
 #include <src_user/Settings/port_config.h>
