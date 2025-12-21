@@ -1,28 +1,29 @@
 /**
-* @file
-* @brief MOBC の DI. MOBC における GS との DI に相当する
-*/
-#ifndef DI_MOBC_H_
-#define DI_MOBC_H_
+ * @file
+ * @brief MOBC の Component Service． MOBC における GS との CSRV に相当する
+ */
+#ifndef CSRV_MOBC_H_
+#define CSRV_MOBC_H_
 
-#include <src_user/Drivers/Etc/mobc.h>
-#include <src_core/System/ApplicationManager/app_info.h>
-#include <src_core/TlmCmd/common_cmd_packet.h>
+#include "../../component_driver/etc/mobc.h"
+#include <src_core/system/application_manager/app_info.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet.h>
 
 extern const MOBC_Driver* const mobc_driver;           //!< MOBC driver
 
 /**
- * @brief  MOBC updateアプリ生成関数
+ * @brief  MOBC update アプリ生成関数
  * @param  void
  * @return AppInfo
  */
-AppInfo DI_MOBC_update(void);
+AppInfo CSRV_MOBC_update(void);
 
 /**
- * @brief  MOBC RT TLM (Realtime telemetry) PH (packet handler) アプリ生成関数
+ * @brief  MOBC RT_TLM (Realtime Telemetry) PH (packet handler) アプリ生成関数
  * @param  void
  * @return AppInfo
+ * @note   ひとまずテレメは RT_TLM のみ実装する
  */
-AppInfo DI_MOBC_rt_tlm_packet_handler(void);
+AppInfo CSRV_MOBC_rt_tlm_packet_handler(void);
 
 #endif
