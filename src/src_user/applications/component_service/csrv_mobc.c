@@ -1,14 +1,15 @@
 #pragma section REPRO
 /**
 * @file
-* @brief MOBC の DI. MOBC における GS との DI に相当する
+* @brief MOBC の Component Service． MOBC における GS との CSRV に相当する
 */
 
-#include "i_mobc.h"
-#include <src_core/TlmCmd/packet_handler.h>
-#include <src_core/Library/print.h>
-#include <src_user/Settings/port_config.h>
-#include <src_user/Settings/DriverSuper/driver_buffer_define.h>
+#include "csrv_mobc.h"
+#include <src_core/tlm_cmd/packet_handler.h>
+#include <src_core/library/print.h>
+#include "../../settings/port_config.h"
+#include "../../settings/component_driver/driver_buffer_define.h"
+#include <src_core/library/result.h>
 
 #define DS_STREAM_REC_BUFFER_SIZE_MOBC (DS_IF_RX_BUFFER_SIZE_MOBC * 2)  //!< DS_StreamRecBuffer のバッファサイズ（非同期通信なので2倍している）
 
