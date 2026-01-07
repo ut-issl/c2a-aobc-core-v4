@@ -6,7 +6,7 @@ set(C2A_SRCS
   app_registry.c
   # UserDefined
   # UserDefined/AppStatus.c
-  UserDefined/debug_apps.c
+  user_defined/debug_apps.c
   # UserDefined/module_test_bench.c
   # UserDefined/AOCS/aocs_mode_manager.c
   # UserDefined/AOCS/aocs_manager.c
