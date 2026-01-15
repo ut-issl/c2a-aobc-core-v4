@@ -2,7 +2,7 @@
   "name": "c2a-aobc-core-v4",
   "packageManager": "pnpm@9.1.1",
   "scripts": {
-    "build:tlmcmddb": "tlmcmddb-cli bundle --pretty tlm-cmd-db/TLM_DB/calced_data tlm-cmd-db/CMD_DB tlmcmddb.json",
+    "build:tlmcmddb": "tlmcmddb-cli bundle --pretty --component-name AOBC tlm-cmd-db/TLM_DB/calced_data tlm-cmd-db/CMD_DB tlmcmddb.json",
     "run:c2a": "cd sils && cargo run",
     "run:gaia": "tmtc-c2a --satconfig satconfig.json --tlmcmddb tlmcmddb.json",
     "run:kble": "bash -c 'while :; do kble -s <(jrsonnet spaghetti.jsonnet); sleep 1; done'",
