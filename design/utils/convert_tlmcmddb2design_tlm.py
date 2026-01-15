@@ -117,13 +117,14 @@ def convert_tlmcmddb2design_tlm(in_path, out_path):
     # 列インデックス決定（3行ヘッダ全体から探す）
     header_map = {}
     header_map["Name"]      = find_col_in_window(header_window, ["Name"])
-    header_map["VarType"]   = find_col_in_window(header_window, ["Var.%%##Type","VarType"])
+    # 旧版DBでは '%%##' が付かない列名（例: Var.##Type）もあるため両方拾う
+    header_map["VarType"]   = find_col_in_window(header_window, ["Var.%%##Type","Var.##Type","VarType"])
     header_map["VarOrFunc"] = find_col_in_window(header_window, ["Variable or Function Name"])
-    header_map["ExtType"]   = find_col_in_window(header_window, ["Ext.%%##Type","ExtType"])
-    header_map["OctetPos"]  = find_col_in_window(header_window, ["Octet%%##Pos."])
-    header_map["BitPos"]    = find_col_in_window(header_window, ["bit%%##Pos."])
-    header_map["BitLen"]    = find_col_in_window(header_window, ["bit%%##Len."])
-    header_map["ConvType"]  = find_col_in_window(header_window, ["Conv.%%##Type"])
+    header_map["ExtType"]   = find_col_in_window(header_window, ["Ext.%%##Type","Ext.##Type","ExtType"])
+    header_map["OctetPos"]  = find_col_in_window(header_window, ["Octet%%##Pos.","Octet##Pos."])
+    header_map["BitPos"]    = find_col_in_window(header_window, ["bit%%##Pos.","bit##Pos."])
+    header_map["BitLen"]    = find_col_in_window(header_window, ["bit%%##Len.","bit##Len."])
+    header_map["ConvType"]  = find_col_in_window(header_window, ["Conv.%%##Type","Conv.##Type"])
     # a0..a5 はサブ列名行に明示される想定なので完全一致で拾う
     header_map["a0"] = find_exact_in_window(header_window, ["a0"])
     header_map["a1"] = find_exact_in_window(header_window, ["a1"])
