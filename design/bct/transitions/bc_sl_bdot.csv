@@ -1,10 +1,10 @@
 subsystem,name,bcid,type,option,ti,cmd,args,description,note
-AOCS,BC_INITIAL_TO_BDOT,9,,,,,,,
+AOCS,BC_INITIAL_TO_BDOT,,,,,,,,
 ,,,deploy,TLCD_ID_DEPLOY_BC,10,BC_POWER_ON_MPU9250,,MPU9250 ON / 5.5sec,
 ,,,deploy,TLCD_ID_DEPLOY_BC,80,BC_POWER_ON_RM3100,,RM3100 ON / 8.5sec,
 ,,,deploy,TLCD_ID_DEPLOY_BC,180,BC_POWER_ON_MTQ,,MTQ ON / 4.5sec,
 ,,,cmd,,230,Cmd_CODE_MM_FINISH_TRANSITION,,,
-AOCS,BC_ANY_TO_BDOT,10,,,,,,,
+AOCS,BC_ANY_TO_BDOT,,,,,,,,
 ,,,param,uint8,,,0,自動モード遷移OFF,
 ,,,cmd,,10,Cmd_CODE_APP_AOCS_MM_SET_AUTO_MODE_TRANSITION,,,
 ,,,deploy,TLCD_ID_DEPLOY_BC,20,BC_POWER_OFF_RWX,,RW X OFF / OFF BCで2秒使う,

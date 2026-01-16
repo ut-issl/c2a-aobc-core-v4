@@ -1,0 +1,3 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_HK_CYCLIC_TLM,,,,,,,,
+,,,deploy,TLCD_ID_DEPLOY_TLM,10,BC_HK_CYCLIC_TLM,,,
