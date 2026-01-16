@@ -1,0 +1,5 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_RW_UPDATE,,,,,,,,
+,,,app,,0,AR_APP_AOCS_RW_CONTROLLER,,max 3msec,
+,,,app,,1,AR_DI_RW0003,,max 6msec,
+,,,app,,3,AR_APP_RW0003_FILTER,,0msec,

@@ -1,0 +1,6 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_SUN_VECTOR_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_NANOSSOC_D60,,,
+,,,app,,1,AR_APP_SUN_SENSOR_SELECTOR,,,
+,,,app,,2,AR_APP_NANOSSOC_D60_FILTER,,,
+,,,app,,3,AR_APP_SUN_VEC_PROPAGATOR,,,

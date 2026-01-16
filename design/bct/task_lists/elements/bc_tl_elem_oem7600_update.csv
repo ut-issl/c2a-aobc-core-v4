@@ -1,0 +1,5 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_OEM7600_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_OEM7600,,,
+,,,app,,1,AR_APP_GPSR_SELECTOR,,,
+,,,app,,2,AR_APP_OEM7600_FILTER,,,

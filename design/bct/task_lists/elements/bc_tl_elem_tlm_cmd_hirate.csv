@@ -1,0 +1,7 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_TL_ELEM_TLM_CMD_HIRATE,,,,,,,,
+,,,app,,0,AR_RTC_DISPATCHER,,,
+,,,app,,1,AR_TLC_DISPATCHER_BC,,,
+,,,app,,2,AR_TLC_DISPATCHER_TLM,,,
+,,,app,,3,AR_CSRV_MOBC_RT_TLM_PH,,,
+,,,app,,5,AR_TLC_DISPATCHER_MIS,,,

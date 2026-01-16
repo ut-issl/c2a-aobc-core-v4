@@ -1,0 +1,8 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_BDOT_TO_ROUGH_SUN_POINTING,,,,,,,,
+,,,param,uint8,,,0,自動モード遷移OFF,
+,,,cmd,,10,Cmd_CODE_APP_AOCS_MM_SET_AUTO_MODE_TRANSITION,,,
+,,,deploy,TLCD_ID_DEPLOY_BC,20,BC_POWER_ON_NANOSSOC_D60,,NanoSSOC-D60 ON / 6.5sec,
+,,,cmd,,120,Cmd_CODE_MM_FINISH_TRANSITION,,モード遷移完了,
+,,,param,uint8,,,1,自動モード遷移ON,
+,,,cmd,,15120,Cmd_CODE_APP_AOCS_MM_SET_AUTO_MODE_TRANSITION,,,

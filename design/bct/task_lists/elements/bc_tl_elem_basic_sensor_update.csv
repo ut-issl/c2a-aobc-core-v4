@@ -1,0 +1,8 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_BASIC_SENSOR_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_MPU9250,,,
+,,,app,,1,AR_APP_MPU9250_FILTER,,,
+,,,app,,2,AR_DI_INA260,,,
+,,,app,,3,AR_APP_CURRENT_ANOMALY,,,
+,,,app,,4,AR_APP_THERMO_SENSOR,,,
+,,,app,,5,AR_APP_AOCS_MANAGER,,,

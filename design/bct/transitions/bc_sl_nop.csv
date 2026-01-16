@@ -1,0 +1,3 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_NOP_SL,,,,,,,,
+,,,cmd,,50,Cmd_CODE_MM_FINISH_TRANSITION,,,

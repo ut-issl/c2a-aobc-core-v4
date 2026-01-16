@@ -1,0 +1,5 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_STT_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_SAGITTA,,,
+,,,app,,1,AR_APP_STT_SELECTOR,,,
+,,,app,,2,AR_APP_SAGITTA_FILTER,,,
