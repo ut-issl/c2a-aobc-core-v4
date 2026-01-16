@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-event_handler_rule_tlmcmd.c から EH ルールを抽出し、
-design/eh/eh_tlmcmd.csv を生成する簡易スクリプト。
-
-出力 CSV の列構成は design/eh.csv と同じ:
-subsystem,is_active,name,group,local,err_level,should_match_err_level,
-type,count_threshold,time_threshold[s],bc,description,note
-"""
 import csv
 import re
 from pathlib import Path
