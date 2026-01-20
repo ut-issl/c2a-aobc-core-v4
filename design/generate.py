@@ -45,6 +45,22 @@ c2a_generator.cmd_csv.generate(
 )
 
 # bct
+bct_sl_src = [
+    [root_path / "design/bct/transitions/sl_initial.csv", 0],
+]
+bct_tl_src = [
+    [root_path / "design/bct/task_lists/tl_start_up.csv", 10],
+    [root_path / "design/bct/task_lists/tl_initial.csv", 11],
+]
+bct_tl_elem_src = [
+    [root_path / "design/bct/task_lists/elements/tl_elem_debug_display.csv", 17],
+    [root_path / "design/bct/task_lists/elements/tl_elem_cdh_update.csv", 19],
+    [root_path / "design/bct/task_lists/elements/tl_elem_tlm_cmd_hirate.csv", 50],
+]
+bct_nbc_src = [
+    [root_path / "design/bct/normal_block_command_definition/nbc_start_hk_tlm.csv", 60],
+]
+
 include_bc_def = """
 #include "block_command_definitions.h"
 #include <src_core/tlm_cmd/block_command_loader.h>
@@ -68,70 +84,88 @@ include_each_bc_def = """
 #include "../telemetry_definitions.h"
 """[1:]
 
-bct_sl_src = [
-    [root_path / "design/bct/transitions/sl_initial.csv", 0],
-]
 for bct in bct_sl_src:
     stem = bct[0].stem
+    include_each_bc_def_sl = f"""
+#include "{stem}.h"
+
+#include <src_user/tlm_cmd/block_command_definitions.h>
+#include <src_user/tlm_cmd/command_definitions.h>
+
+#include <src_core/applications/timeline_command_dispatcher_id_define.h>
+#include <src_core/tlm_cmd/block_command_loader.h>
+#include <src_core/system/time_manager/obc_time.h>
+"""[1:]
     c2a_generator.bct_def_c.generate(
         [bct],
         root_path / "src/src_user/tlm_cmd/block_command_definitions.c",
         root_path / "src/src_user/settings/modes/transitions" / f"{stem}.h",
         include_bc_def,
-        include_each_bc_def,
-        include_nbc_header,
+        include_each_bc_def_sl,
+        "",
     )
 
-bct_tl_src = [
-    [root_path / "design/bct/task_lists/tl_start_up.csv", 10],
-    [root_path / "design/bct/task_lists/tl_initial.csv", 11],
-]
 for bct in bct_tl_src:
     stem = bct[0].stem
+    include_each_bc_def_tl = f"""
+#include "{stem}.h"
+
+#include <src_user/applications/app_registry.h>
+#include <src_user/tlm_cmd/block_command_definitions.h>
+
+#include <src_core/tlm_cmd/block_command_loader.h>
+"""[1:]
     c2a_generator.bct_def_c.generate(
-        bct_tl_src,
+        [bct],
         root_path / "src/src_user/tlm_cmd/block_command_definitions.c",
         root_path / "src/src_user/settings/modes/task_lists" / f"{stem}.h",
         include_bc_def,
-        include_each_bc_def,
-        include_nbc_header,
+        include_each_bc_def_tl,
+        "",
     )
 
-bct_tl_elem_src = [
-    [root_path / "design/bct/task_lists/elements/tl_elem_debug_display.csv", 17],
-    [root_path / "design/bct/task_lists/elements/tl_elem_cdh_update.csv", 19],
-    [root_path / "design/bct/task_lists/elements/tl_elem_tlm_cmd_hirate.csv", 50],
-]
 for bct in bct_tl_elem_src:
     stem = bct[0].stem
+    include_each_bc_def_tl_elem = f"""
+#include "{stem}.h"
+
+#include <src_user/applications/app_registry.h>
+#include <src_user/tlm_cmd/block_command_definitions.h>
+
+#include <src_core/tlm_cmd/block_command_loader.h>
+"""[1:]
     c2a_generator.bct_def_c.generate(
-        bct_tl_elem_src,
+        [bct],
         root_path / "src/src_user/tlm_cmd/block_command_definitions.c",
         root_path / "src/src_user/settings/modes/task_lists/elements" / f"{stem}.h",
         include_bc_def,
-        include_each_bc_def,
-        include_nbc_header,
+        include_each_bc_def_tl_elem,
+        "",
     )
 
-bct_nbc_src = [
-    [root_path / "design/bct/normal_block_command_definition/nbc_start_hk_tlm.csv", 60],
-]
+bct_src = bct_sl_src + bct_tl_src + bct_tl_elem_src + bct_nbc_src
 c2a_generator.bct_def_c.generate(
-    bct_nbc_src,
+    bct_src,
     root_path / "src/src_user/tlm_cmd/block_command_definitions.c",
-    root_path / "src/src_user/tlm_cmd/normal_block_command_definition/nbc_header.h",
+    root_path / "src/src_user/tlm_cmd/bc_header_dummy.h",
     include_bc_def,
     include_each_bc_def,
     include_nbc_header,
 )
-
-bct_src = bct_sl_src + bct_tl_src + bct_tl_elem_src + bct_nbc_src
 c2a_generator.bct_def_h.generate(
     bct_src, root_path / "src/src_user/tlm_cmd/block_command_definitions.h"
 )
 c2a_generator.bct_csv.generate(
     bct_src, root_path / "tlm-cmd-db/CMD_DB/AOBC_CMD_DB_BCT.csv"
 )
+dummy_bc_header = root_path / "src/src_user/tlm_cmd/bc_header_dummy.h"
+if dummy_bc_header.exists():
+    dummy_bc_header.unlink()
+for bct in bct_src:
+    stem = bct[0].stem
+    bc_header_path = root_path / "src/src_user/tlm_cmd/" / f"{stem}.c"
+    if bc_header_path.exists():
+        bc_header_path.unlink()
 
 # tlm
 tlm_path = root_path / "design/tlm"
