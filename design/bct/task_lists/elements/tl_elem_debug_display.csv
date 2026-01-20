@@ -1,0 +1,12 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_AR_DEBUG_DISPLAY_INI,41,,,,,,,
+,,,app,,0,AR_APP_DBG_PRINT_GIT_REV,,,
+,,,app,,1,AR_APP_DBG_PRINT_TIMESTAMP,,,
+,,,app,,2,AR_APP_DBG_PRINT_CMD_STATUS,,,
+,,,app,,3,AR_APP_DBG_PRINT_EVENT_LOGGER0,,,
+,,,app,,4,AR_APP_DBG_PRINT_EVENT_LOGGER1,,,
+,,,app,,5,AR_APP_DBG_PRINT_EVENT_HANDLER,,,
+,,,app,,6,AR_NOP,,,
+,,,app,,7,AR_NOP,,,
+,,,app,,8,AR_NOP,,,
+,,,app,,9,AR_APP_DBG_FLUSH_SCREEN,,,

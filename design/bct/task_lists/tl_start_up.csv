@@ -1,0 +1,4 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_TL_START_UP,,,,,,,,
+,,,combine,,0,BC_AC_CDH_UPDATE,,23step以上,
+,,,rotate,,95,BC_AR_DEBUG_DISPLAY_INI,,,

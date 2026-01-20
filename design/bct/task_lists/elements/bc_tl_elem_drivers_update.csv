@@ -1,5 +1,5 @@
 subsystem,name,bcid,type,option,ti,cmd,args,description,note
-AOCS,BC_DRIVERS_UPDATE_INITIAL,,,,,,,,
+AOCS,BC_AR_DRIVERS_UPDATE_INI,,,,,,,,
 ,,,app,,0,AR_DI_NANOSSOC_D60,,,
 ,,,app,,1,AR_NOP,,,
 ,,,app,,2,AR_DI_STIM210,,,

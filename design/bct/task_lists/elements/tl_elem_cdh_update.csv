@@ -1,6 +1,6 @@
 subsystem,name,bcid,type,option,ti,cmd,args,description,note
-AOCS,BC_CDH_UPDATE,,,,,,,,
-,,,app,,0,AR_DI_MOBC,,,
+AOCS,BC_AC_CDH_UPDATE,,,,,,,,
+,,,app,,0,AR_CSRV_MOBC_CMD_PH,,,
 ,,,app,,1,AR_GSC_DISPATCHER,,,
 ,,,app,,2,AR_TLC_DISPATCHER_GS,,,
 ,,,app,,3,AR_RTC_DISPATCHER,,,

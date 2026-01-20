@@ -1,5 +1,9 @@
 subsystem,name,bcid,type,option,ti,cmd,args,description,note
-AOCS,BC_START_HK_TLM,,,,,,,,
-,,,param,uint8,,,Tlm_CODE_AOBC_HK,HK General,
+AOCS,BC_HK_CYCLIC_TLM,,,,,,,,
+,,,param,uint8,,,Tlm_CODE_AOBC_HK_GEN,HK General,
 ,,,cmd,,1,Cmd_CODE_TG_GENERATE_RT_TLM,,,
+,,,param,uint8,,,Tlm_CODE_AOBC_HK_COMPO,HK Components,
+,,,cmd,,2,Cmd_CODE_TG_GENERATE_RT_TLM,,,
+,,,param,uint8,,,Tlm_CODE_AOBC_HK_ALGO,HK Algorithm,
+,,,cmd,,4,Cmd_CODE_TG_GENERATE_RT_TLM,,,
 ,,,deploy,TLCD_ID_DEPLOY_TLM,10,BC_HK_CYCLIC_TLM,,,
