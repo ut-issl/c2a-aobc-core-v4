@@ -13,7 +13,7 @@
  */
 typedef enum
 {
-  EH_RULE_TEST0 = 9,
+  EH_RULE_TEST0 = 0,
 } EH_RULE_ID;
 
 

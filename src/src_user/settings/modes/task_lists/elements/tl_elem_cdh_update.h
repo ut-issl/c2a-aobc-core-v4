@@ -1,10 +1,12 @@
 /**
-* @file   tl_elem_cdh_update.c
-* @brief  CDH関連処理TL Element
-*/
-#ifndef TL_ELEM_CDH_UPDATE_H_
-#define TL_ELEM_CDH_UPDATE_H_
+ * @file
+ * @brief  ブロックコマンド定義
+ * @note   このコードは自動生成されています！
+ */
+#ifndef BC_HEADER_H_
+#define BC_HEADER_H_
 
-void BCL_load_cdh_update(void);
+
+void BCL_load_ac_cdh_update(void);
 
 #endif

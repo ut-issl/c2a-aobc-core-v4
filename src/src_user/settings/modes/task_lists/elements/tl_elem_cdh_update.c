@@ -1,18 +1,20 @@
-/**
-* @file   tl_elem_cdh_update.c
-* @brief  CDH関連処理TL Element
-*/
 #pragma section REPRO
+/**
+ * @file
+ * @brief  ブロックコマンド定義
+ * @note   このコードは自動生成されています！
+ */
 #include "tl_elem_cdh_update.h"
 
-#include <src_user/TlmCmd/block_command_definitions.h>
-#include <src_user/Applications/app_registry.h>
+#include <src_user/applications/app_registry.h>
+#include <src_user/tlm_cmd/block_command_definitions.h>
 
-#include <src_core/TlmCmd/block_command_loader.h>
+#include <src_core/tlm_cmd/block_command_loader.h>
 
-void BCL_load_cdh_update()
+
+void BCL_load_ac_cdh_update(void)
 {
-  BCL_tool_register_app(0, AR_DI_MOBC);
+  BCL_tool_register_app(0, AR_CSRV_MOBC_CMD_PH);
   BCL_tool_register_app(1, AR_GSC_DISPATCHER);
   BCL_tool_register_app(2, AR_TLC_DISPATCHER_GS);
   BCL_tool_register_app(3, AR_RTC_DISPATCHER);

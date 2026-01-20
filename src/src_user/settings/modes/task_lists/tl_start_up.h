@@ -7,6 +7,6 @@
 #define BC_HEADER_H_
 
 
-void BCL_load_tl_initial(void);
+void BCL_load_tl_start_up(void);
 
 #endif

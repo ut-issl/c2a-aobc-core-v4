@@ -1,6 +1,12 @@
-#ifndef TL_ELEM_TLM_CMD_HIRATE_H_
-#define TL_ELEM_TLM_CMD_HIRATE_H_
+/**
+ * @file
+ * @brief  ブロックコマンド定義
+ * @note   このコードは自動生成されています！
+ */
+#ifndef BC_HEADER_H_
+#define BC_HEADER_H_
 
-void BCL_load_tl_elem_tlm_cmd_hirate(void);
+
+void BCL_load_ac_tlm_cmd_hirate(void);
 
 #endif

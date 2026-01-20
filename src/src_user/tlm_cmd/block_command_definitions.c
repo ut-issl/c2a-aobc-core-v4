@@ -18,16 +18,14 @@
  */
 void BC_load_defaults(void)
 {
-  BCL_load_bc(BC_AR_DRIVERS_UPDATE_INI, BCL_load_ar_drivers_update_ini);
-  BCL_load_bc(BC_AR_DEBUG_DISPLAY_INI, BCL_load_ar_debug_display_ini);
-  BCL_load_bc(BC_AR_GS_RELATED_PROCESS, BCL_load_ar_gs_related_process);
-  BCL_load_bc(BC_AC_TLM_CMD_HIRATE, BCL_load_ac_tlm_cmd_hirate);
-  BCL_load_bc(BC_HK_CYCLIC_TLM, BCL_load_hk_cyclic_tlm);
-  BCL_load_bc(BC_TL_START_UP, BCL_load_tl_start_up);    // STARTUPモード
-  WDT_clear_wdt();
-  BCL_load_bc(BC_TL_INITIAL, BCL_load_tl_initial);    // INITIALモード
   BCL_load_bc(BC_SL_START_UP_TO_INITIAL, BCL_load_sl_start_up_to_initial);
-  BCL_load_bc(BC_SL_NOP, BCL_load_sl_nop);
+  BCL_load_bc(BC_TL_START_UP, BCL_load_tl_start_up);
+  BCL_load_bc(BC_TL_INITIAL, BCL_load_tl_initial);
+  BCL_load_bc(BC_AR_DEBUG_DISPLAY_INI, BCL_load_ar_debug_display_ini);
+  BCL_load_bc(BC_AC_CDH_UPDATE, BCL_load_ac_cdh_update);
+  BCL_load_bc(BC_AC_TLM_CMD_HIRATE, BCL_load_ac_tlm_cmd_hirate);
+  WDT_clear_wdt();
+  BCL_load_bc(BC_HK_CYCLIC_TLM, BCL_load_hk_cyclic_tlm);
 }
 
 #pragma section

@@ -14,14 +14,12 @@
 #include "src_user/settings/system/event_handler_rules/event_handler_rules.h"
 #include "src_user/settings/system/event_logger_group.h"
 
-void BCL_load_ar_drivers_update_ini(void);
+void BCL_load_sl_start_up_to_initial(void);
+void BCL_load_tl_start_up(void);
+void BCL_load_tl_initial(void);
 void BCL_load_ar_debug_display_ini(void);
-void BCL_load_ar_gs_related_process(void);
+void BCL_load_ac_cdh_update(void);
 void BCL_load_ac_tlm_cmd_hirate(void);
 void BCL_load_hk_cyclic_tlm(void);
-void BCL_load_tl_start_up(void);    // STARTUPモード
-void BCL_load_tl_initial(void);    // INITIALモード
-void BCL_load_sl_start_up_to_initial(void);
-void BCL_load_sl_nop(void);
 
 #endif
