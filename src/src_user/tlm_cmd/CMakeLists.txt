@@ -8,10 +8,19 @@ set(C2A_SRCS
   command_definitions.c
   telemetry_definitions.c
   user_packet_handler.c
-  normal_block_command_definition/nbc_cdh.c
-  normal_block_command_definition/nbc_sequence_list.c
-  normal_block_command_definition/nbc_task_list.c
-  normal_block_command_definition/nbc_tl_elems.c
+  # common_cmd_packet.c
+  # common_tlm_cmd_packet.c
+  # common_tlm_packet.c
+  normal_block_command_definition/nbc_start_hk_tlm.c
+  # normal_block_command_definition/nbc_mpu9250.c
+  # normal_block_command_definition/nbc_rm3100.c
+  # normal_block_command_definition/nbc_nanossoc_d60.c
+  # normal_block_command_definition/nbc_stim210.c
+  # normal_block_command_definition/nbc_sagitta.c
+  # normal_block_command_definition/nbc_oem7600.c
+  # normal_block_command_definition/nbc_mtq.c
+  # normal_block_command_definition/nbc_rw0003.c
+  # normal_block_command_definition/nbc_ina260.c
 )
 
 if(C2A_BUILD_AS_CXX)
