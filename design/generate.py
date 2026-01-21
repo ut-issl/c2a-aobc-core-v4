@@ -9,12 +9,12 @@ root_path = (
 
 # eh
 c2a_generator.eh_rules_h.generate(
-    root_path / "design/eh/eh.csv",
+    root_path / "design/eh.csv",
     root_path / "src/src_user/settings/system/event_handler_rules/event_handler_rules.h",
     base_id=0,
 )
 c2a_generator.eh_rules_c.generate(
-    root_path / "design/eh/eh.csv",
+    root_path / "design/eh.csv",
     root_path / "src/src_user/settings/system/event_handler_rules/event_handler_rules.c",
     eh_header="""
 #include "event_handler_rules.h"
