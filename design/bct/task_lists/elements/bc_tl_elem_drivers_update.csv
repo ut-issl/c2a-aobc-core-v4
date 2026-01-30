@@ -1,0 +1,12 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_AR_DRIVERS_UPDATE_INI,,,,,,,,
+,,,app,,0,AR_DI_NANOSSOC_D60,,,
+,,,app,,1,AR_NOP,,,
+,,,app,,2,AR_DI_STIM210,,,
+,,,app,,3,AR_DI_RM3100,,,
+,,,app,,4,AR_NOP,,,
+,,,app,,5,AR_NOP,,,
+,,,app,,6,AR_DI_MPU9250,,,
+,,,app,,7,AR_NOP,,,
+,,,app,,8,AR_NOP,,,
+,,,app,,9,AR_NOP,,,

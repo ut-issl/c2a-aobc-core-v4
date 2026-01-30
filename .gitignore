@@ -52,8 +52,18 @@ CMakeBuilds/
 .vscode/
 __vm/
 
+# Build artifacts
+build/
+target/
+
+# Node
+node_modules/
+
 # others
 src/src_user/IfWrapper/SILS/FLASH_DB/*.dat
+tlmcmddb.json
+*.Identifier
+*.lock
 
 # Visual Micro for PIC32
 Debug/
@@ -64,4 +74,3 @@ Examples/src_aobc
 
 # pytest cache
 *.pyc
-

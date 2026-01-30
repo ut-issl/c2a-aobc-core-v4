@@ -1,0 +1,12 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_AC_CDH_UPDATE,,,,,,,,
+,,,app,,0,AR_CSRV_MOBC_CMD_PH,,,
+,,,app,,1,AR_GSC_DISPATCHER,,,
+,,,app,,2,AR_TLC_DISPATCHER_GS,,,
+,,,app,,3,AR_RTC_DISPATCHER,,,
+,,,app,,4,AR_TLC_DISPATCHER_BC,,,
+,,,app,,5,AR_TLC_DISPATCHER_TLM,,,
+,,,app,,6,AR_CSRV_MOBC_RT_TLM_PH,,,
+,,,app,,7,AR_EVENT_UTILITY,,,
+,,,app,,8,AR_APP_AOCS_DATA_RECORDER,,,
+,,,app,,9,AR_APP_NVM_BC,,,

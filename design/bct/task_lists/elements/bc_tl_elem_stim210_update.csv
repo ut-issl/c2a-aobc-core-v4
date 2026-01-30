@@ -1,0 +1,5 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_STIM210_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_STIM210,,,
+,,,app,,1,AR_APP_STIM210_FILTER,,,
+,,,app,,2,AR_APP_GYRO_SELECTOR,,,

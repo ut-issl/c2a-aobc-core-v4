@@ -1,0 +1,5 @@
+subsystem,name,bcid,type,option,ti,cmd,args,description,note
+AOCS,BC_RM3100_UPDATE,,,,,,,,
+,,,app,,0,AR_DI_RM3100,,,
+,,,app,,1,AR_APP_RM3100_FILTER,,,
+,,,app,,2,AR_APP_MAG_SELECTOR,,,
