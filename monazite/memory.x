@@ -40,6 +40,7 @@ MEMORY
 /* The location of the stack can be overridden using the
    `_stack_start` symbol.  Place the stack at the end of RAM */
 _stack_start = ORIGIN(DTCM) + LENGTH(DTCM);
+_stack_end = ORIGIN(DTCM);
 
 /* The location of the .text section can be overridden using the
    `_stext` symbol.  By default it will place after .vector_table */

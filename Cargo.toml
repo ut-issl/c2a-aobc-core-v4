@@ -1,13 +1,24 @@
+[workspace]
+resolver = "2"
+members = ["sils"]
+default-members = ["sils"]
+
+[workspace.lints.clippy]
+pedantic = "warn"
+
+[workspace.dependencies]
+c2a-aobc-core-v4 = { path = "./" }
+
+[lints]
+workspace = true
+
 [package]
 name = "c2a-aobc-core-v4"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-c2a-core = { path = "src/src_core" }
-c2a-dev-runtime = { path = "src/src_core/dev-runtime" }
-c2a-uart-kble = { path = "src/src_core/hal/uart-kble" }
-c2a-wdt-noop = { path = "src/src_core/hal/wdt-noop" }
+c2a-core = "4.1.0"
 
 [build-dependencies]
-cmake = "0.1"
+cmake = "0.1.50"

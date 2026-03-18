@@ -23,7 +23,7 @@ else()
   target_compile_options(${PROJECT_NAME} PUBLIC "-Wall" "-Wno-unknown-pragmas")
   # debug
   target_compile_options(${PROJECT_NAME} PUBLIC "-g")
-  if(NOT USE_32BIT_COMPILER)
+  if(C2A_BUILD_FOR_32BIT) 
     target_compile_options(${PROJECT_NAME} PUBLIC "-m32")
     target_link_options(${PROJECT_NAME} PRIVATE "-m32")
   endif()
