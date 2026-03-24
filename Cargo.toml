@@ -3,11 +3,18 @@ resolver = "2"
 members = ["sils"]
 default-members = ["sils"]
 
+[workspace.package]
+version = "4.5.1"
+repository = "https://github.com/arkedge/c2a-core"
+
 [workspace.lints.clippy]
 pedantic = "warn"
 
 [workspace.dependencies]
 c2a-aobc-core-v4 = { path = "./" }
+c2a-dev-runtime = { path = "src/src_core/dev-runtime" }
+c2a-uart-kble = { path = "src/src_core/hal/uart-kble" }
+c2a-wdt-noop = { path = "src/src_core/hal/wdt-noop" }
 
 [lints]
 workspace = true
