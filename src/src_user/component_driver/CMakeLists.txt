@@ -13,7 +13,7 @@ set(C2A_SRCS
   # Aocs/stim210.c
   # Cdh/fm25v10.c
   etc/mobc.c
-  # Power/ina260.c
+  Power/ina260.c
 )
 
 if(C2A_BUILD_AS_CXX)

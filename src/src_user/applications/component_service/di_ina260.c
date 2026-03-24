@@ -6,17 +6,18 @@
 
 #include "di_ina260.h"
 
-#include <src_core/Library/print.h>
-#include <src_core/Library/endian.h>
-#include <src_core/TlmCmd/common_cmd_packet_util.h>
-#include <src_core/System/EventManager/event_logger.h>
-#include <src_user/Settings/port_config.h>
-#include <src_user/Settings/DriverSuper/driver_buffer_define.h>
-#include <src_user/Applications/UserDefined/Power/power_switch_control.h>
+#include <src_core/library/print.h>
+#include <src_core/library/endian.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet_util.h>
+#include <src_core/system/event_manager/event_logger.h>
+#include <src_user/settings/port_config.h>
+#include <src_user/settings/component_driver/driver_buffer_define.h>
+#include <src_user/applications/user_defined/Power/power_switch_control.h>
+#include <src_core/library/result.h>
 
 
-static void DI_INA260_init_(void);
-static void DI_INA260_update_(void);
+static RESULT DI_INA260_init_(void);
+static RESULT DI_INA260_update_(void);
 static uint8_t DI_INA260_conv_idx_to_i2c_address_(uint8_t idx);
 static void DI_INA260_increment_idx_counter_(void);
 
@@ -32,8 +33,8 @@ const  INA260_Driver* const ina260_driver[INA260_IDX_MAX] = {&ina260_driver_[INA
                                                              &ina260_driver_[INA260_IDX_RW0003_Y],
                                                              &ina260_driver_[INA260_IDX_RW0003_Z]};
 // バッファ
-static DS_StreamRecBuffer DI_INA260_rx_buffer_[INA260_IDX_MAX];
-static uint8_t DI_INA260_rx_buffer_allocation_[INA260_IDX_MAX][DS_STREAM_REC_BUFFER_SIZE_SYNCHRONOUS_SMALL];
+static CDS_StreamRecBuffer DI_INA260_rx_buffer_[INA260_IDX_MAX];
+static uint8_t DI_INA260_rx_buffer_allocation_[INA260_IDX_MAX][CDS_STREAM_REC_BUFFER_SIZE_SYNCHRONOUS_SMALL];
 
 static uint8_t    DI_INA260_is_initialized_[INA260_IDX_MAX]; //!< 0 = not initialized, 1 = initialized
 static INA260_IDX DI_INA260_idx_counter_ = (INA260_IDX)(0);  //!< DI_INA260_update_が呼ばれたときに観測する電流センサを指定するカウンタ．
@@ -45,35 +46,40 @@ AppInfo DI_INA260_update(void)
   return AI_create_app_info("update_DI_INA260", DI_INA260_init_, DI_INA260_update_);
 }
 
-static void DI_INA260_init_(void)
+static RESULT DI_INA260_init_(void)
 {
   uint8_t i;
-  DS_ERR_CODE ret1;
-  DS_INIT_ERR_CODE ret2;
+  CDS_ERR_CODE ret1;
+  CDS_INIT_ERR_CODE ret2;
   uint8_t addr;
+  RESULT err = RESULT_OK;
 
   for (i = 0; i < INA260_IDX_MAX; ++i)
   {
-    ret1 = DS_init_stream_rec_buffer(&DI_INA260_rx_buffer_[i],
-                                     DI_INA260_rx_buffer_allocation_[i],
-                                     sizeof(DI_INA260_rx_buffer_allocation_[i]));
-    if (ret1 != DS_ERR_CODE_OK)
+    ret1 = CDS_init_stream_rec_buffer(&DI_INA260_rx_buffer_[i],
+                                      DI_INA260_rx_buffer_allocation_[i],
+                                      sizeof(DI_INA260_rx_buffer_allocation_[i]));
+    if (ret1 != CDS_ERR_CODE_OK)
     {
       Printf("INA260 buffer #%d init Failed ! %d \n", i, ret1);
+      err = RESULT_ERR;
     }
 
     addr = DI_INA260_conv_idx_to_i2c_address_(i);
     ret2 = INA260_init(&ina260_driver_[i], PORT_CH_I2C_INAS, addr, &DI_INA260_rx_buffer_[i]);
-    if (ret2 != DS_INIT_OK)
+    if (ret2 != CDS_INIT_OK)
     {
       Printf("INA260 #%d init Failed ! %d \n", i, ret2);
+      err = RESULT_ERR;
     }
 
     DI_INA260_is_initialized_[i] = 0;
   }
+
+  return err;
 }
 
-static void DI_INA260_update_(void)
+static RESULT DI_INA260_update_(void)
 {
   if (power_switch_control->switch_state_5v[APP_PSC_5V_IDX_INA260] == APP_PSC_STATE_OFF)
   {
@@ -81,25 +87,27 @@ static void DI_INA260_update_(void)
     {
       DI_INA260_is_initialized_[i] = 0;
     }
-    return;
+    return RESULT_OK;
   }
 
   if (DI_INA260_is_initialized_[DI_INA260_idx_counter_])
   {
-    DS_CMD_ERR_CODE ret;
+    CDS_CMD_ERR_CODE ret;
     ret = INA260_observe_current(&ina260_driver_[DI_INA260_idx_counter_]);
-    if (ret != DS_CMD_OK)
+    if (ret != CDS_CMD_OK)
     {
       EL_record_event(EL_GROUP_TLM_ERROR_INA260, (uint32_t)DI_INA260_idx_counter_, EL_ERROR_LEVEL_HIGH, (uint32_t)ret);
     }
     ret = INA260_observe_voltage(&ina260_driver_[DI_INA260_idx_counter_]);
-    if (ret != DS_CMD_OK)
+    if (ret != CDS_CMD_OK)
     {
       EL_record_event(EL_GROUP_TLM_ERROR_INA260, (uint32_t)DI_INA260_idx_counter_, EL_ERROR_LEVEL_HIGH, (uint32_t)ret);
     }
   }
 
   DI_INA260_increment_idx_counter_();
+
+  return RESULT_OK;
 }
 
 static uint8_t DI_INA260_conv_idx_to_i2c_address_(uint8_t idx)
@@ -147,7 +155,7 @@ CCP_CmdRet Cmd_DI_INA260_INIT(const CommonCmdPacket* packet)
 {
   const uint8_t* param = CCP_get_param_head(packet);
   INA260_IDX idx;
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
 
   idx = (INA260_IDX)param[0];
   if (idx >= INA260_IDX_MAX) return CCP_make_cmd_ret_without_err_code(CCP_EXEC_ILLEGAL_PARAMETER);
@@ -157,12 +165,12 @@ CCP_CmdRet Cmd_DI_INA260_INIT(const CommonCmdPacket* packet)
   INA260_CONVERSION_TIME current_conversion_time = (INA260_CONVERSION_TIME)param[3];
 
   ret = INA260_set_mode(&ina260_driver_[idx], averaging_mode, voltage_conversion_time, current_conversion_time);
-  if (ret == DS_CMD_OK)
+  if (ret == CDS_CMD_OK)
   {
     DI_INA260_is_initialized_[idx] = 1;
   }
 
-  return DS_conv_cmd_err_to_ccp_cmd_ret(ret);
+  return CDS_conv_cmd_err_to_ccp_cmd_ret(ret);
 }
 
 CCP_CmdRet Cmd_DI_INA260_SET_OVER_CURRENT_PROTECTION(const CommonCmdPacket* packet)
@@ -170,7 +178,7 @@ CCP_CmdRet Cmd_DI_INA260_SET_OVER_CURRENT_PROTECTION(const CommonCmdPacket* pack
   const uint8_t* param = CCP_get_param_head(packet);
   float over_current_threshold_mA;
   INA260_IDX idx;
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
 
   idx = (INA260_IDX)param[0];
   if (idx >= INA260_IDX_MAX) return CCP_make_cmd_ret_without_err_code(CCP_EXEC_ILLEGAL_PARAMETER);
@@ -179,14 +187,14 @@ CCP_CmdRet Cmd_DI_INA260_SET_OVER_CURRENT_PROTECTION(const CommonCmdPacket* pack
   // アサーションはset関数内で行っている
 
   ret = INA260_set_over_current_threshold(&ina260_driver_[idx], over_current_threshold_mA);
-  if (ret != DS_CMD_OK) return DS_conv_cmd_err_to_ccp_cmd_ret(ret);
+  if (ret != CDS_CMD_OK) return CDS_conv_cmd_err_to_ccp_cmd_ret(ret);
 
   ret = INA260_enable_over_current_protection(&ina260_driver_[idx]);
 
   // OCにかかっていた時にラッチを外すため一度読む
   ret = INA260_read_mask_register(&ina260_driver_[idx]);
 
-  return DS_conv_cmd_err_to_ccp_cmd_ret(ret);
+  return CDS_conv_cmd_err_to_ccp_cmd_ret(ret);
 }
 
 #pragma section

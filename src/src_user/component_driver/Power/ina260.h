@@ -6,8 +6,8 @@
 #ifndef INA260_H_
 #define INA260_H_
 
-#include <src_core/IfWrapper/i2c.h>
-#include <src_core/Drivers/Super/driver_super.h>
+#include <src_core/hal/i2c.h>
+#include <src_core/component_driver/driver_super.h>
 
 
 /**
@@ -76,8 +76,8 @@ typedef struct
 {
   struct
   {
-    DriverSuper super;      //!< DriverSuper class
-    I2C_Config i2c_config;  //!< I2C class
+    ComponentDriverSuper super; //!< ComponentDriverSuper class
+    I2C_Config i2c_config;      //!< I2C class
   } driver;
   INA260_Info info;
 } INA260_Driver;
@@ -92,49 +92,49 @@ typedef struct
  * @param  ch             : INA260が接続されているI2Cポート番号
  * @param  i2c_address    : INA260のI2Cデバイスアドレス
  * @param  rx_buffer: 受信バッファ
- * @return DS_INIT_ERR_CODE
+ * @return CDS_INIT_ERR_CODE
  */
-DS_INIT_ERR_CODE INA260_init(INA260_Driver* ina260_driver, uint8_t ch, uint8_t i2c_address, DS_StreamRecBuffer* rx_buffer);
+CDS_INIT_ERR_CODE INA260_init(INA260_Driver* ina260_driver, uint8_t ch, uint8_t i2c_address, CDS_StreamRecBuffer* rx_buffer);
 
 /**
  * @brief  INA260モード設定コマンド
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
  * @param  mode           : INA260に設定する各種モード情報を束ねたもの
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_set_mode(INA260_Driver* ina260_driver,
-                                INA260_AVERAGING_MODE averaging_mode,
-                                INA260_CONVERSION_TIME voltage_conversion_time,
-                                INA260_CONVERSION_TIME current_conversion_time);
+CDS_CMD_ERR_CODE INA260_set_mode(INA260_Driver* ina260_driver,
+                                 INA260_AVERAGING_MODE averaging_mode,
+                                 INA260_CONVERSION_TIME voltage_conversion_time,
+                                 INA260_CONVERSION_TIME current_conversion_time);
 
 /**
  * @brief  INA260過電流閾値設定コマンド
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
  * @param  mode           : INA260に設定する過電流閾値[mA]
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_set_over_current_threshold(INA260_Driver* ina260_driver, float threshold_current_mA);
+CDS_CMD_ERR_CODE INA260_set_over_current_threshold(INA260_Driver* ina260_driver, float threshold_current_mA);
 
 /**
  * @brief  INA260過電流保護有効化コマンド
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_enable_over_current_protection(INA260_Driver* ina260_driver);
+CDS_CMD_ERR_CODE INA260_enable_over_current_protection(INA260_Driver* ina260_driver);
 
 /**
  * @brief  INA260電流観測コマンド
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_observe_current(INA260_Driver* ina260_driver);
+CDS_CMD_ERR_CODE INA260_observe_current(INA260_Driver* ina260_driver);
 
 /**
  * @brief  INA260電圧観測コマンド
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_observe_voltage(INA260_Driver* ina260_driver);
+CDS_CMD_ERR_CODE INA260_observe_voltage(INA260_Driver* ina260_driver);
 
 
 /**
@@ -142,8 +142,8 @@ DS_CMD_ERR_CODE INA260_observe_voltage(INA260_Driver* ina260_driver);
  *
  *         読むことでOCラッチを外すことができる
  * @param  ina260_driver : INA260_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEに準じる
+ * @return CDS_CMD_ERR_CODEに準じる
  */
-DS_CMD_ERR_CODE INA260_read_mask_register(INA260_Driver* ina260_driver);
+CDS_CMD_ERR_CODE INA260_read_mask_register(INA260_Driver* ina260_driver);
 
 #endif

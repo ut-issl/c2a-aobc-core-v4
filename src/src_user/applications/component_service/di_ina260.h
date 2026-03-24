@@ -5,8 +5,9 @@
 #ifndef DI_INA260_H_
 #define DI_INA260_H_
 
-#include <src_user/Drivers/Power/ina260.h>
-#include <src_core/System/ApplicationManager/app_info.h>
+#include <src_user/component_driver/Power/ina260.h>
+#include <src_core/system/application_manager/app_info.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet.h>
 
 /**
  * @enum  INA260_IDX

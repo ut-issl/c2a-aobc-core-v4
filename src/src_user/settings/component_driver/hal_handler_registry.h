@@ -3,11 +3,13 @@
 
 
 #include <src_core/hal/ccsds.h>
+#include <src_core/hal/i2c.h>
 #include <src_core/hal/uart.h>
 
 typedef enum
 {
   HAL_HANDLER_ID_UART,
+  HAL_HANDLER_ID_I2C,
   HAL_HANDLER_ID_MAX
 } HAL_HANDLER_ID;
 

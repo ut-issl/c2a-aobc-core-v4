@@ -27,7 +27,7 @@ void AR_load_initial_settings(void)
   // add_application_(AR_DI_RW0003,       DI_RW0003_update);
   // add_application_(AR_APP_MODULE_TEST_BENCH, APP_MODULE_TEST_BENCH_create_app); // 登録はしておくが、消しても良い
   // Power
-  // add_application_(AR_DI_INA260, DI_INA260_update);
+  add_application_(AR_DI_INA260, DI_INA260_update);
   // CDH
   // add_application_(AR_DI_FM25V10, DI_FM25V10_update);
 

@@ -30,7 +30,7 @@
 // #include "DriverInstances/di_rw0003.h"
 // #include "UserDefined/module_test_bench.h"  // 登録はしておくが、消しても良い
 // Power
-// #include "DriverInstances/di_ina260.h"
+#include "component_service/di_ina260.h"
 // CDH
 // #include "DriverInstances/di_fm25v10.h"
 

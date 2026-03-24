@@ -5,8 +5,8 @@
 #ifndef POWER_SWITCH_CONTROL_H_
 #define POWER_SWITCH_CONTROL_H_
 
-#include <src_core/System/ApplicationManager/app_info.h>
-#include <src_core/TlmCmd/common_cmd_packet.h>
+#include <src_core/system/application_manager/app_info.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet.h>
 
 /**
  * @enum   APP_PSC_STATE

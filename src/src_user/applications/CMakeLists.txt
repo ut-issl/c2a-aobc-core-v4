@@ -57,7 +57,7 @@ set(C2A_SRCS
   # DriverInstances/uart_example.c
   # DriverInstances/DI_i2c_example.c
   component_service/csrv_mobc.c
-  # DriverInstances/di_ina260.c
+  component_service/di_ina260.c
   # DriverInstances/di_mpu9250.c
   # DriverInstances/di_mtq_seiren.c
   # DriverInstances/di_nanossoc_d60.c
