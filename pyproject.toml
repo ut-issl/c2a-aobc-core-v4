@@ -6,6 +6,11 @@ readme = "README.md"
 requires-python = ">= 3.8"
 dependencies = [
     "c2a-generator @ git+https://github.com/ut-issl/c2a-generator.git@refac-separate_include",
+    "fastapi>=0.115.0",
+    "pyserial>=3.5",
+    "pyserial-asyncio>=0.6",
+    "uvicorn>=0.30.0",
+    "websockets>=13.0",
 ]
 
 [tool.rye]

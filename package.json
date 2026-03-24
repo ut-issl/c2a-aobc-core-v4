@@ -7,10 +7,14 @@
     "run:gaia": "tmtc-c2a --satconfig satconfig.json --tlmcmddb tlmcmddb.json",
     "run:kble": "bash -c 'while :; do kble -s <(jrsonnet spaghetti.jsonnet); sleep 1; done'",
     "run-real:kble-serialport": "bash -c 'while :; do kble-serialport; sleep 1; done'",
+    "run-real:docker-kble-serialport": "python3 scripts/serial_ws_bridge.py --addr 0.0.0.0 --port 9600",
     "run-real:kble": "bash -c 'while :; do kble -s <(jrsonnet spaghetti.real.jsonnet -V=COM_PORT); sleep 1; done'",
+    "run-real:kble:docker": "bash -c 'while :; do kble -s <(jrsonnet spaghetti.docker.real.jsonnet -V=COM_PORT); sleep 1; done'",
     "run-all": "run-p run:*",
     "run-real": "run-p run:gaia run-real:*",
     "devtools:real": "run-s build:* run-real",
+    "run-real:docker": "run-p run:gaia run-real:kble:docker",
+    "devtools:real:docker": "run-s build:* run-real:docker",
     "devtools:sils": "run-s build:* run-all"
   },
   "devDependencies": {

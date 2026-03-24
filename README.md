@@ -79,6 +79,20 @@
 ### How to construct the development environment for real AOBC
 - Please use [monazite](https://github.com/arkedge/monazite).
 
+### DevTools on macOS for real AOBC
+- This is for the case where an AOBC flashed with C2A is connected to a Mac via USB and DevTools is used to send commands and view telemetry.
+- Start the serial bridge on the Mac host:
+    ```
+    python3 scripts/serial_ws_bridge.py --addr 0.0.0.0 --port 9600
+    ```
+- In another terminal, start DevTools in Docker:
+    ```
+    COM_PORT=/dev/cu.usbserial-XXXX docker compose up -d --build
+    ```
+  - Replace `/dev/cu.usbserial-XXXX` with the device path of your AOBC.
+  - From the second run onward, `docker compose up -d` is enough if the image does not need rebuilding.
+- After startup, open `http://localhost:8900/devtools/`.
+
        
 ### How to edit TLM/CMD (Telemetry/Command)
 - Please find detailed information on `c2a-aobc-core-v4/design/README.md`.

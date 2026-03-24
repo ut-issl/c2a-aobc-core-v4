@@ -1,0 +1,16 @@
+services:
+  devtools-real:
+    platform: linux/amd64
+    build: .
+    container_name: c2a-aobc-core-v4-real
+    working_dir: /root/c2a-aobc-core-v4
+    volumes:
+      - .:/root/c2a-aobc-core-v4
+      - /root/c2a-aobc-core-v4/node_modules
+    environment:
+      COM_PORT: "${COM_PORT:-}"
+    ports:
+      - "8900:8900"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: pnpm run devtools:real:docker
