@@ -105,6 +105,17 @@ void CA_load_cmd_table(CA_CmdInfo cmd_table[CA_MAX_CMDS])
   cmd_table[Cmd_CODE_CA_SET_PAGE_FOR_TLM].cmd_func = Cmd_CA_SET_PAGE_FOR_TLM;
   cmd_table[Cmd_CODE_GSCD_CLEAR_ERR_LOG].cmd_func = Cmd_GSCD_CLEAR_ERR_LOG;
   cmd_table[Cmd_CODE_RTCD_CLEAR_ERR_LOG].cmd_func = Cmd_RTCD_CLEAR_ERR_LOG;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_INIT].cmd_func = Cmd_CSRV_STIM377H_INIT;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_MODE].cmd_func = Cmd_CSRV_STIM377H_SET_MODE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_NORMAL_MODE_FORMAT].cmd_func = Cmd_CSRV_STIM377H_SET_NORMAL_MODE_FORMAT;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_GYRO_OUTPUT].cmd_func = Cmd_CSRV_STIM377H_SET_GYRO_OUTPUT;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_SAMPLE_RATE].cmd_func = Cmd_CSRV_STIM377H_SET_SAMPLE_RATE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_TERMINATION_MODE].cmd_func = Cmd_CSRV_STIM377H_SET_TERMINATION_MODE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_LOW_PASS_FILTER].cmd_func = Cmd_CSRV_STIM377H_SET_LOW_PASS_FILTER;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].cmd_func = Cmd_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S].cmd_func = Cmd_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].cmd_func = Cmd_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].cmd_func = Cmd_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB;
 
   cmd_table[Cmd_CODE_TMGR_SET_TIME].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
   cmd_table[Cmd_CODE_AM_REGISTER_APP].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
@@ -220,6 +231,31 @@ void CA_load_cmd_table(CA_CmdInfo cmd_table[CA_MAX_CMDS])
   cmd_table[Cmd_CODE_CA_REGISTER_CMD].param_size_infos[1].packed_info.bit.first = CA_PARAM_SIZE_TYPE_RAW;
   cmd_table[Cmd_CODE_TF_SET_PAGE_FOR_TLM].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
   cmd_table[Cmd_CODE_CA_SET_PAGE_FOR_TLM].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_MODE].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_NORMAL_MODE_FORMAT].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_GYRO_OUTPUT].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_SAMPLE_RATE].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_TERMINATION_MODE].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_LOW_PASS_FILTER].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].param_size_infos[0].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].param_size_infos[1].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].param_size_infos[1].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_FRAME_TRANSFORMATION_QUATERNION_C2B].param_size_infos[2].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S].param_size_infos[0].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S].param_size_infos[1].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_COMPO_RAD_S].param_size_infos[1].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].param_size_infos[0].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].param_size_infos[1].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].param_size_infos[1].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_BIAS_TEMP_CALIB].param_size_infos[2].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].param_size_infos[0].packed_info.bit.first = CA_PARAM_SIZE_TYPE_1BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].param_size_infos[0].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].param_size_infos[1].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].param_size_infos[1].packed_info.bit.second = CA_PARAM_SIZE_TYPE_4BYTE;
+  cmd_table[Cmd_CODE_CSRV_STIM377H_SET_ANG_VEL_SF_TEMP_CALIB].param_size_infos[2].packed_info.bit.first = CA_PARAM_SIZE_TYPE_4BYTE;
 }
 
 #pragma section

@@ -7,7 +7,7 @@
 #define STIM210_PARAMETERS_H_
 
 #include <stdint.h>
-#include <src_user/Library/physical_constants.h>
+#include <src_user/library/physical_constants.h>
 
 // Constant value
 #define STIM210_PARAMETERS_kNumCoeffTempCalib (2)  //!< Number of coefficient for calibration. This value cannot be changed since it relates Tlm/Cmd definition.

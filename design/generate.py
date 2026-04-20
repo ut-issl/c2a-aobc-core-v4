@@ -59,6 +59,7 @@ bct_tl_elem_src = [
 ]
 bct_nbc_src = [
     [root_path / "design/bct/normal_block_command_definition/nbc_start_hk_tlm.csv", 60],
+    [root_path / "design/bct/normal_block_command_definition/nbc_stim377h.csv", 70],
 ]
 
 include_bc_def = """

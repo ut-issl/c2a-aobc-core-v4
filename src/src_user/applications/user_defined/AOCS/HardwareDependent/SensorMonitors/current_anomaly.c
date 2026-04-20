@@ -34,7 +34,7 @@ AppInfo APP_CURRENT_ANOMALY_create_app(void)
 static void APP_CURRENT_ANOMALY_init_(void)
 {
   current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_PIC]          = FDIR_PARAMETERS_hw_oc_detection_threshold_pic_V;
-  current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_STIM210]      = FDIR_PARAMETERS_hw_oc_detection_threshold_stim210_V;
+  current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_STIM377H]      = FDIR_PARAMETERS_hw_oc_detection_threshold_stim377h_V;
   current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_SAGITTA]      = FDIR_PARAMETERS_hw_oc_detection_threshold_sagitta_V;
   current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_OEM7600]      = FDIR_PARAMETERS_hw_oc_detection_threshold_oem7600_V;
   current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_RM3100]       = FDIR_PARAMETERS_hw_oc_detection_threshold_rm3100_V;
@@ -45,7 +45,7 @@ static void APP_CURRENT_ANOMALY_init_(void)
   current_anomaly_.hw_oc_event_logger_threshold_V[INA260_IDX_RW0003_Z]     = FDIR_PARAMETERS_hw_oc_detection_threshold_rw0003_z_V;
 
   current_anomaly_.sw_oc_threshold_mA[INA260_IDX_PIC]          = FDIR_PARAMETERS_sw_oc_threshold_pic_mA;
-  current_anomaly_.sw_oc_threshold_mA[INA260_IDX_STIM210]      = FDIR_PARAMETERS_sw_oc_threshold_stim210_mA;
+  current_anomaly_.sw_oc_threshold_mA[INA260_IDX_STIM377H]      = FDIR_PARAMETERS_sw_oc_threshold_stim377h_mA;
   current_anomaly_.sw_oc_threshold_mA[INA260_IDX_SAGITTA]      = FDIR_PARAMETERS_sw_oc_threshold_sagitta_mA;
   current_anomaly_.sw_oc_threshold_mA[INA260_IDX_OEM7600]      = FDIR_PARAMETERS_sw_oc_threshold_oem7600_mA;
   current_anomaly_.sw_oc_threshold_mA[INA260_IDX_RM3100]       = FDIR_PARAMETERS_sw_oc_threshold_rm3100_mA;
@@ -92,8 +92,8 @@ APP_PSC_STATE APP_CURRENT_ANOMALY_get_switch_state_(INA260_IDX idx)
   {
   case INA260_IDX_PIC:
     return power_switch_control->switch_state_5v[APP_PSC_5V_IDX_INA260];
-  case INA260_IDX_STIM210:
-    return power_switch_control->switch_state_unreg[APP_PSC_UNREG_IDX_STIM210];
+  case INA260_IDX_STIM377H:
+    return power_switch_control->switch_state_unreg[APP_PSC_UNREG_IDX_STIM377H];
   case INA260_IDX_SAGITTA:
     return power_switch_control->switch_state_unreg[APP_PSC_UNREG_IDX_SAGITTA];
   case INA260_IDX_OEM7600:

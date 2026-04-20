@@ -3,7 +3,7 @@
  * @brief STIM210に関する衛星固有パラメータを管理する
  */
 
-#include <src_user/Settings/SatelliteParameters/stim210_parameters.h>
+#include <src_user/settings/SatelliteParameters/stim210_parameters.h>
 
 // Gyro constant bias
 // The following parameter should be tuned with experiment

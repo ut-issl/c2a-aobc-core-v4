@@ -26,7 +26,7 @@
 #define  PORT_CH_GPIO_OUT_POWER_SS      (73)  //!< サンセンサの電源スイッチ
 #define  PORT_CH_GPIO_OUT_POWER_MTQ     (91)  //!< MTQの電源スイッチ
 // 12V系統
-#define  PORT_CH_GPIO_OUT_POWER_STIM    ( 6)  //!< STIM210精ジャイロセンサの電源スイッチ
+#define  PORT_CH_GPIO_OUT_POWER_STIM    ( 6)  //!< STIM377H精ジャイロセンサの電源スイッチ
 #define  PORT_CH_GPIO_OUT_POWER_SAGITTA ( 7)  //!< STTの電源スイッチ
 #define  PORT_CH_GPIO_OUT_POWER_OEM     ( 8)  //!< GSP受信機の電源スイッチ
 #define  PORT_CH_GPIO_OUT_POWER_RWX     (71)  //!< X軸RWの電源スイッチ
@@ -50,8 +50,8 @@
 // その他
 #define  PORT_CH_GPIO_OUT_SELF_RST    (17)  //!< PIC自己リセット
 #define  PORT_CH_GPIO_OUT_OEM_RST     (74)  //!< GPS-Rリセット（負論理）
-#define  PORT_CH_GPIO_OUT_STIM_RST    (77)  //!< STIM210リセット（負論理）
-#define  PORT_CH_GPIO_OUT_STIM_TRIG   (76)  //!< STIM210 External Triger
+#define  PORT_CH_GPIO_OUT_STIM_RST    (77)  //!< STIM377Hリセット（負論理）
+#define  PORT_CH_GPIO_OUT_STIM_TRIG   (76)  //!< STIM377H External Triger
 #define  PORT_CH_GPIO_OUT_SAGITTA_PPS (88)  //!< STTへのPPS信号バイパス
 #define  PORT_CH_GPIO_IN_REFV         (20)  //!< UNREG+Vが供給されているかどうか判断できるよう分圧した電圧
 
@@ -118,7 +118,7 @@
 
 // PORT_CH_I2C_INAS
 #define I2C_DEVICE_ADDR_INA_PIC      (0x40)  //!< PIC用のINA260電流センサ
-#define I2C_DEVICE_ADDR_INA_STIM     (0x41)  //!< STIM210用のINA260電流センサ
+#define I2C_DEVICE_ADDR_INA_STIM     (0x41)  //!< STIM377H用のINA260電流センサ
 #define I2C_DEVICE_ADDR_INA_SAGITTA  (0x42)  //!< STT用のINA260電流センサ
 #define I2C_DEVICE_ADDR_INA_OEM      (0x43)  //!< GPS-R用のINA260電流センサ
 #define I2C_DEVICE_ADDR_INA_RM       (0x44)  //!< RM3100用のINA260電流センサ

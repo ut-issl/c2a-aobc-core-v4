@@ -1752,12 +1752,20 @@ static TF_TLM_FUNC_ACK Tlm_AOBC_HK_ALGO_(uint8_t* packet, uint16_t* len, uint16_
 
 static TF_TLM_FUNC_ACK Tlm_AOBC_COMPONENTS_(uint8_t* packet, uint16_t* len, uint16_t max_len)
 {
-  if (26 > max_len) return TF_TLM_FUNC_ACK_TOO_SHORT_LEN;
+  if (35 > max_len) return TF_TLM_FUNC_ACK_TOO_SHORT_LEN;
 
 #ifndef BUILD_SETTINGS_FAST_BUILD
+  TF_copy_u8(&packet[26], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.counter));
+  TF_copy_u16(&packet[27], (uint16_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.latency_sec));
+  TF_copy_u8(&packet[29], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.normal_mode_format));
+  TF_copy_u8(&packet[30], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.gyro_output_mode));
+  TF_copy_u8(&packet[31], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.termination_mode));
+  TF_copy_u8(&packet[32], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.low_pass_filter_frequency));
+  TF_copy_u8(&packet[33], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.sample_rate));
+  TF_copy_u8(&packet[34], (uint8_t)(stim377h_driver[STIM377H_IDX_IN_UNIT]->info.status));
 #endif
 
-  *len = 26;
+  *len = 35;
   return TF_TLM_FUNC_ACK_SUCCESS;
 }
 
