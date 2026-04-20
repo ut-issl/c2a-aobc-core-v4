@@ -20,7 +20,7 @@ void AR_load_initial_settings(void)
   // add_application_(AR_DI_MPU9250,      DI_MPU9250_update);
   // add_application_(AR_DI_RM3100,       DI_RM3100_update);
   // add_application_(AR_DI_NANOSSOC_D60, DI_NANOSSOC_D60_update);
-  // add_application_(AR_DI_STIM210,      DI_STIM210_update);
+  add_application_(AR_CSRV_STIM377H,    CSRV_STIM377H_update);
   // add_application_(AR_DI_SAGITTA,      DI_SAGITTA_update);
   // add_application_(AR_DI_OEM7600,      DI_OEM7600_update);
   // add_application_(AR_DI_MTQ_SEIREN,   DI_MTQ_SEIREN_update);
@@ -78,7 +78,7 @@ void AR_load_initial_settings(void)
   // add_application_(AR_APP_GPSR_SELECTOR, APP_GPSR_SELECTOR_create_app);
   // add_application_(AR_APP_MPU9250_FILTER, APP_MPU9250_FILTER_create_app);
   // add_application_(AR_APP_RM3100_FILTER, APP_RM3100_FILTER_create_app);
-  // add_application_(AR_APP_STIM210_FILTER, APP_STIM210_FILTER_create_app);
+  // add_application_(AR_APP_STIM377H_FILTER, APP_STIM377H_FILTER_create_app);
   // add_application_(AR_APP_OEM7600_FILTER, APP_OEM7600_FILTER_create_app);
   // add_application_(AR_APP_RW0003_FILTER, APP_RW0003_FILTER_create_app);
   // add_application_(AR_APP_SAGITTA_FILTER, APP_SAGITTA_FILTER_create_app);

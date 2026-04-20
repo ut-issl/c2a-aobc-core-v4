@@ -50,7 +50,7 @@ set(C2A_SRCS
   # UserDefined/Cdh/non_volatile_memory_parameter.c
   # UserDefined/Cdh/non_volatile_memory_bc.c
   # UserDefined/Cdh/aocs_data_recorder.c
-  # UserDefined/Power/power_switch_control.c
+  user_defined/Power/power_switch_control.c
   # UserDefined/Thermal/thermo_sensor.c
   # UserDefined/Thermal/temperature_anomaly.c
   # DriverInstances
@@ -65,7 +65,7 @@ set(C2A_SRCS
   # DriverInstances/di_rm3100.c
   # DriverInstances/di_rw0003.c
   # DriverInstances/di_sagitta.c
-  # DriverInstances/di_stim210.c
+  component_service/csrv_stim377h.c
   # DriverInstances/di_fm25v10.c
   # Core
   ${C2A_CORE_DIR}/applications/gs_command_dispatcher.c

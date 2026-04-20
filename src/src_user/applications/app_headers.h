@@ -23,7 +23,7 @@
 // #include "DriverInstances/di_mpu9250.h"
 // #include "DriverInstances/di_rm3100.h"
 // #include "DriverInstances/di_nanossoc_d60.h"
-// #include "DriverInstances/di_stim210.h"
+#include "component_service/csrv_stim377h.h"
 // #include "DriverInstances/di_sagitta.h"
 // #include "DriverInstances/di_oem7600.h"
 // #include "DriverInstances/di_mtq_seiren.h"
