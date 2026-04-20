@@ -12,6 +12,7 @@ set(C2A_SRCS
   # common_tlm_cmd_packet.c
   # common_tlm_packet.c
   normal_block_command_definition/nbc_start_hk_tlm.c
+  normal_block_command_definition/nbc_stim377h.c
   # normal_block_command_definition/nbc_mpu9250.c
   # normal_block_command_definition/nbc_rm3100.c
   # normal_block_command_definition/nbc_nanossoc_d60.c

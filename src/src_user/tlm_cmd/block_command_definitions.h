@@ -17,6 +17,8 @@ typedef enum
   BC_AC_TLM_CMD_HIRATE = 50,
   BC_HK_CYCLIC_TLM = 60,
 
+  BC_POWER_ON_STIM377H = 70,
+
   BC_ID_MAX    // BCT 自体のサイズは BCT_MAX_BLOCKS で規定
 } BC_DEFAULT_ID;
 

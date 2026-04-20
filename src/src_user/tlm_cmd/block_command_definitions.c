@@ -26,6 +26,7 @@ void BC_load_defaults(void)
   BCL_load_bc(BC_AC_TLM_CMD_HIRATE, BCL_load_ac_tlm_cmd_hirate);
   WDT_clear_wdt();
   BCL_load_bc(BC_HK_CYCLIC_TLM, BCL_load_hk_cyclic_tlm);
+  BCL_load_bc(BC_POWER_ON_STIM377H, BCL_load_power_on_stim377h);
 }
 
 #pragma section

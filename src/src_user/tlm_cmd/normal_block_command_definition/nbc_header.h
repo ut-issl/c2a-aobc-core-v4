@@ -21,5 +21,6 @@ void BCL_load_ar_debug_display_ini(void);
 void BCL_load_ac_cdh_update(void);
 void BCL_load_ac_tlm_cmd_hirate(void);
 void BCL_load_hk_cyclic_tlm(void);
+void BCL_load_power_on_stim377h(void);
 
 #endif
