@@ -8,23 +8,24 @@ set(C2A_SRCS
   # ControlUtility/gyroscopic_effect.c
   print.c
   # math_constants.c
-  # physical_constants.c
-  # matrix33.c
+  physical_constants.c
+  matrix33.c
   # matrix.c
-  # vector3.c
+  vector3.c
   # xxhash.c
   vt100.c
   # time_space.c
   # geomagnetism.c
-  # c2a_math.c
-  # quaternion.c
+  c2a_math.c
+  quaternion.c
   # crc8.c
+  crc32.c
   # TimeSystem/gps_time.c
   # Orbit/kepler_orbit.c
   # Orbit/sgp4.c
   # SignalProcess/z_filter.c
   # SignalProcess/spike_filter.c
-  # SignalProcess/polynomial_approximation.c
+  SignalProcess/polynomial_approximation.c
   RTT/SEGGER_RTT.c
   RTT/SEGGER_RTT_printf.c
 )

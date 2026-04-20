@@ -6,10 +6,10 @@
 
 #include "power_switch_control.h"
 
-#include <src_core/TlmCmd/common_cmd_packet_util.h>
-#include <src_core/Library/print.h>
-#include <src_user/IfWrapper/GPIO.h>
-#include <src_user/Settings/port_config.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet_util.h>
+#include <src_core/library/print.h>
+#include <src_user/hal/GPIO.h>
+#include <src_user/settings/port_config.h>
 
 /**
  * @enum   APP_PSC_OUTPUT_LOGIC
@@ -87,7 +87,7 @@ static void APP_PSC_init_(void)
   APP_PSC_private_info_5v_[APP_PSC_5V_IDX_MTQ_SEIREN].port_list   = PORT_CH_GPIO_OUT_POWER_MTQ;
 
   // unregulated power port list
-  APP_PSC_private_info_unreg_[APP_PSC_UNREG_IDX_STIM210].port_list = PORT_CH_GPIO_OUT_POWER_STIM;
+  APP_PSC_private_info_unreg_[APP_PSC_UNREG_IDX_STIM377H].port_list = PORT_CH_GPIO_OUT_POWER_STIM;
   APP_PSC_private_info_unreg_[APP_PSC_UNREG_IDX_SAGITTA].port_list = PORT_CH_GPIO_OUT_POWER_SAGITTA;
   APP_PSC_private_info_unreg_[APP_PSC_UNREG_IDX_OEM7600].port_list = PORT_CH_GPIO_OUT_POWER_OEM;
   APP_PSC_private_info_unreg_[APP_PSC_UNREG_IDX_RWX].port_list     = PORT_CH_GPIO_OUT_POWER_RWX;
@@ -213,7 +213,7 @@ void APP_PSC_switch_state_tlm_unreg_(APP_PSC_UNREG_IDX port_id, APP_PSC_STATE ou
   uint8_t out_u8 = (output == APP_PSC_STATE_ON) ? 1 : 0;
   switch (port_id)
   {
-  case APP_PSC_UNREG_IDX_STIM210:
+  case APP_PSC_UNREG_IDX_STIM377H:
     power_switch_control_.switch_state_unreg_tlm.bit.stim210 = out_u8;
     break;
   case APP_PSC_UNREG_IDX_SAGITTA:

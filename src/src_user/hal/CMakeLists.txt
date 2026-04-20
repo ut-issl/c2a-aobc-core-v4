@@ -19,9 +19,10 @@ if(C2A_BUILD_WITH_SILS_MOCKUP)
 else()
   #target_sources(${PROJECT_NAME} PUBLIC
   set(C2A_HAL_IMPL_COMMON_SRCS
-    sils/i2c_sils.cpp  
+    sils/i2c_sils.cpp
     sils/uart_sils.cpp
     sils/wdt_sils.cpp
+    sils/gpio_sils.cpp
   )
 
   if(C2A_USE_SCI_COM_WINGS) # option 名が confusing だが，subobc の upstream（単体試験では WINGS と疎通するポート）は UART

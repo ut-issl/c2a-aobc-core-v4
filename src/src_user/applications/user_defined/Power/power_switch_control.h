@@ -5,8 +5,8 @@
 #ifndef POWER_SWITCH_CONTROL_H_
 #define POWER_SWITCH_CONTROL_H_
 
-#include <src_core/System/ApplicationManager/app_info.h>
-#include <src_core/TlmCmd/common_cmd_packet.h>
+#include <src_core/system/application_manager/app_info.h>
+#include <src_core/tlm_cmd/common_packet/common_cmd_packet.h>
 
 /**
  * @enum   APP_PSC_STATE
@@ -43,7 +43,7 @@ typedef enum
  */
 typedef enum
 {
-  APP_PSC_UNREG_IDX_STIM210 = 0,
+  APP_PSC_UNREG_IDX_STIM377H = 0,
   APP_PSC_UNREG_IDX_SAGITTA,
   APP_PSC_UNREG_IDX_OEM7600,
   APP_PSC_UNREG_IDX_RWX,
