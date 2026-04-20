@@ -10,7 +10,7 @@ set(C2A_SRCS
   # Aocs/rm3100.c
   # Aocs/rw0003.c
   # Aocs/sagitta.c
-  # Aocs/stim210.c
+  Aocs/stim377h.c
   # Cdh/fm25v10.c
   etc/mobc.c
   # Power/ina260.c

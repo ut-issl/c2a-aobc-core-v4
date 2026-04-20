@@ -5,12 +5,12 @@
 */
 
 #include "stim210.h"
-#include <src_core/Library/endian.h>
-#include <src_core/Library/print.h>
+#include <src_core/library/endian.h>
+#include <src_core/library/print.h>
 #include <string.h>
-#include <src_user/Library/vector3.h>
-#include <src_user/Library/matrix33.h>
-#include <src_user/Library/crc8.h>
+#include <src_user/library/vector3.h>
+#include <src_user/library/matrix33.h>
+#include <src_user/library/crc8.h>
 
 
 #define STIM210_STREAM_TLM_CMD (0)       //!< テレコマで使うストリーム
@@ -51,10 +51,10 @@ static const float STIM210_kMaxTemperatureDegC_ = 128.0f;
 static const bool     STIM210_kCrcRevFlag_ = false; //!< 反転フラグ
 static const uint16_t STIM210_kCrcInitial_ = 0xff;  //!< 初期値
 
-static DS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t param_size, const char* cmd_param);
-static DS_ERR_CODE STIM210_load_driver_super_init_settings_(DriverSuper* p_super);
-static DS_ERR_CODE STIM210_analyze_rec_data_(DS_StreamConfig* stream_config, void* p_driver);
-static DS_CMD_ERR_CODE STIM210_set_rec_frame_size_(STIM210_Driver* stim210_driver);
+static CDS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t param_size, const char* cmd_param);
+static CDS_ERR_CODE STIM210_load_driver_super_init_settings_(ComponentDriverSuper* p_super);
+static CDS_ERR_CODE STIM210_analyze_rec_data_(CDS_StreamConfig* stream_config, void* p_driver);
+static CDS_CMD_ERR_CODE STIM210_set_rec_frame_size_(STIM210_Driver* stim210_driver);
 static int STIM210_analyze_normal_mode_format_idx_(STIM210_Driver* stim210_driver, const uint8_t* stim210_rx_data, uint8_t tlm_body_idx);
 static int STIM210_analyze_gyro_output_(STIM210_Driver* stim210_driver, const uint8_t* stim210_rx_data, uint8_t tlm_body_idx);
 static int STIM210_analyze_gyro_status_(STIM210_Driver* stim210_driver, const uint8_t* stim210_rx_data, uint8_t tlm_body_idx);
@@ -69,13 +69,13 @@ static int STIM210_convert_latency_(STIM210_Driver* stim210_driver, const uint8_
 
 static void STIM210_calc_ang_vel_calibration_(STIM210_Info* info);
 
-int STIM210_init(STIM210_Driver* stim210_driver,
-                 uint8_t ch,
-                 uint8_t ch_gpio_trig,
-                 uint8_t ch_gpio_reset,
-                 DS_StreamRecBuffer* rx_buffer)
+CDS_INIT_ERR_CODE STIM210_init(STIM210_Driver* stim210_driver,
+                               uint8_t ch,
+                               uint8_t ch_gpio_trig,
+                               uint8_t ch_gpio_reset,
+                               CDS_StreamRecBuffer* rx_buffer)
 {
-  DS_ERR_CODE ret;
+  CDS_ERR_CODE ret;
   GPIO_ERR_CODE ret_gpio_trig_setting, ret_gpio_reset_setting;
 
   stim210_driver->driver.uart_config.ch = ch;
@@ -84,11 +84,11 @@ int STIM210_init(STIM210_Driver* stim210_driver,
   stim210_driver->driver.uart_config.data_length = UART_DATA_LENGTH_8BIT;
   stim210_driver->driver.uart_config.stop_bit = UART_STOP_BIT_1BIT;
 
-  ret = DS_init(&(stim210_driver->driver.super),
+  ret = CDS_init(&(stim210_driver->driver.super),
                 &(stim210_driver->driver.uart_config),
                 rx_buffer,
                 STIM210_load_driver_super_init_settings_);
-  if (ret != DS_ERR_CODE_OK) return 1;
+  if (ret != CDS_ERR_CODE_OK) return CDS_INIT_CDS_INIT_ERR;
 
   stim210_driver->driver.ch_gpio_trig = ch_gpio_trig;
   stim210_driver->driver.ch_gpio_reset = ch_gpio_reset;
@@ -96,12 +96,12 @@ int STIM210_init(STIM210_Driver* stim210_driver,
   ret_gpio_trig_setting  = (GPIO_ERR_CODE)GPIO_set_direction(stim210_driver->driver.ch_gpio_trig, GPIO_OUTPUT);
   ret_gpio_reset_setting = (GPIO_ERR_CODE)GPIO_set_direction(stim210_driver->driver.ch_gpio_reset, GPIO_OUTPUT);
 
-  if ((ret_gpio_trig_setting != GPIO_OK) || (ret_gpio_reset_setting != GPIO_OK)) return 2;
+  if ((ret_gpio_trig_setting != GPIO_OK) || (ret_gpio_reset_setting != GPIO_OK)) return CDS_INIT_OTHER_ERR;
 
   ret_gpio_trig_setting  = (GPIO_ERR_CODE)GPIO_set_output(stim210_driver->driver.ch_gpio_trig, GPIO_HIGH); // HIGHで初期化する
   ret_gpio_reset_setting = (GPIO_ERR_CODE)GPIO_set_output(stim210_driver->driver.ch_gpio_reset, GPIO_LOW); // LOWで初期化する
 
-  if ((ret_gpio_trig_setting != GPIO_OK) || (ret_gpio_reset_setting != GPIO_OK)) return 3;
+  if ((ret_gpio_trig_setting != GPIO_OK) || (ret_gpio_reset_setting != GPIO_OK)) return CDS_INIT_OTHER_ERR;
 
   stim210_driver->info.frame_transform_c2b = QUATERNION_make_unit();
   MATRIX33_make_unit(stim210_driver->info.ang_vel_scale_factor_compo);
@@ -110,7 +110,8 @@ int STIM210_init(STIM210_Driver* stim210_driver,
     stim210_driver->info.ang_vel_bias_compo_rad_sec[axis] = 0.0f;
   }
 
-  return STIM210_reset_param(stim210_driver);
+  STIM210_reset_param(stim210_driver);
+  return CDS_INIT_OK;
 }
 
 int STIM210_reset_param(STIM210_Driver* stim210_driver)
@@ -139,36 +140,36 @@ int STIM210_reset_param(STIM210_Driver* stim210_driver)
 }
 
 // ---------- UART Telemetry ----------
-DS_REC_ERR_CODE STIM210_rec(STIM210_Driver* stim210_driver)
+CDS_REC_ERR_CODE STIM210_rec(STIM210_Driver* stim210_driver)
 {
-  DS_ERR_CODE ret;
-  DS_StreamConfig* stream_config;
+  CDS_ERR_CODE ret;
+  CDS_StreamConfig* stream_config;
 
   // NORMAL Modeだけデータを受け取る
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_NORMAL_MODE) return DS_REC_OTHER_ERR;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_NORMAL_MODE) return CDS_REC_OTHER_ERR;
 
   STIM210_set_rec_frame_size_(stim210_driver);
-  ret = DS_receive(&(stim210_driver->driver.super));
+  ret = CDS_receive(&(stim210_driver->driver.super));
   stream_config = &(stim210_driver->driver.super.stream_config[STIM210_STREAM_TLM_CMD]);
 
-  if (ret != DS_ERR_CODE_OK)
+  if (ret != CDS_ERR_CODE_OK)
   {
-    return DS_REC_DS_RECEIVE_ERR;
+    return CDS_REC_CDS_RECEIVE_ERR;
   }
 
-  if (DSSC_get_rec_status(stream_config)->status_code != DS_STREAM_REC_STATUS_FIXED_FRAME)
+  if (CDSSC_get_rec_status(stream_config)->status_code != CDS_STREAM_REC_STATUS_FIXED_FRAME)
   {
-    return DS_REC_OTHER_ERR;
+    return CDS_REC_OTHER_ERR;
   }
 
-  ret = DS_analyze_rec_data(&(stim210_driver->driver.super), STIM210_STREAM_TLM_CMD, stim210_driver);
+  ret = CDS_analyze_rec_data(&(stim210_driver->driver.super), STIM210_STREAM_TLM_CMD, stim210_driver);
 
-  if (ret != DS_ERR_CODE_OK)
+  if (ret != CDS_ERR_CODE_OK)
   {
-    return DS_REC_ANALYZE_ERR;
+    return CDS_REC_ANALYZE_ERR;
   }
 
-  return DS_REC_OK;
+  return CDS_REC_OK;
 }
 
 // ---------- GPIO ----------
@@ -194,32 +195,32 @@ int STIM210_reset_by_gpio(STIM210_Driver* stim210_driver)
 }
 
 // ---------- UART Command ----------
-DS_CMD_ERR_CODE STIM210_set_service_mode(STIM210_Driver* stim210_driver)
+CDS_CMD_ERR_CODE STIM210_set_service_mode(STIM210_Driver* stim210_driver)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
   strcpy(code, "SERVICEMODE");
   len = strlen(code);
 
-  if (stim210_driver->info.operation_mode == STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode == STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.operation_mode = STIM210_OPERATION_SERVICE_MODE;
 
   return ret;
 }
 
-DS_CMD_ERR_CODE STIM210_set_normal_mode_format(STIM210_Driver* stim210_driver, STIM210_NORMAL_MODE_FORMAT normal_mode_format)
+CDS_CMD_ERR_CODE STIM210_set_normal_mode_format(STIM210_Driver* stim210_driver, STIM210_NORMAL_MODE_FORMAT normal_mode_format)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   switch (normal_mode_format)
   {
@@ -251,25 +252,25 @@ DS_CMD_ERR_CODE STIM210_set_normal_mode_format(STIM210_Driver* stim210_driver, S
     strcpy(code, "d p");
     break;
   default:
-    return DS_CMD_ILLEGAL_PARAMETER;
+    return CDS_CMD_ILLEGAL_PARAMETER;
   }
 
   len = strlen(code);
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.normal_mode_format = normal_mode_format;
 
   return ret;
 }
 
-DS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_SAMPLE_RATE sample_rate)
+CDS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_SAMPLE_RATE sample_rate)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   switch (sample_rate)
   {
@@ -292,25 +293,25 @@ DS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_
     strcpy(code, "m 0");
     break;
   default:
-    return DS_CMD_ILLEGAL_PARAMETER;
+    return CDS_CMD_ILLEGAL_PARAMETER;
   }
 
   len = strlen(code);
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.sample_rate = sample_rate;
 
   return ret;
 }
 
-DS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_GYRO_OUTPUT_MODE gyro_output_mode)
+CDS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_GYRO_OUTPUT_MODE gyro_output_mode)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   switch (gyro_output_mode)
   {
@@ -327,25 +328,25 @@ DS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_
     strcpy(code, "u s");
     break;
   default:
-    return DS_CMD_ILLEGAL_PARAMETER;
+    return CDS_CMD_ILLEGAL_PARAMETER;
   }
 
   len = strlen(code);
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.gyro_output_mode = gyro_output_mode;
 
   return ret;
 }
 
-DS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STIM210_TERMINATION_MODE termination_mode)
+CDS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STIM210_TERMINATION_MODE termination_mode)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   switch (termination_mode)
   {
@@ -356,24 +357,24 @@ DS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STI
     strcpy(code, "r 3");
     break;
   default:
-    return DS_CMD_ILLEGAL_PARAMETER;
+    return CDS_CMD_ILLEGAL_PARAMETER;
   }
 
   len = strlen(code);
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.termination_mode = termination_mode;
 
   return ret;
 }
 
-DS_CMD_ERR_CODE STIM210_set_low_pass_filter(STIM210_Driver* stim210_driver, STIM210_LPF low_pass_filter_frequency)
+CDS_CMD_ERR_CODE STIM210_set_low_pass_filter(STIM210_Driver* stim210_driver, STIM210_LPF low_pass_filter_frequency)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   switch (low_pass_filter_frequency)
   {
@@ -393,31 +394,31 @@ DS_CMD_ERR_CODE STIM210_set_low_pass_filter(STIM210_Driver* stim210_driver, STIM
     strcpy(code, "f 262");
     break;
   default:
-    return DS_CMD_ILLEGAL_PARAMETER;
+    return CDS_CMD_ILLEGAL_PARAMETER;
   }
 
   len = strlen(code);
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.low_pass_filter_frequency = low_pass_filter_frequency;
 
   return (ret);
 }
 
-DS_CMD_ERR_CODE STIM210_set_normal_mode(STIM210_Driver* stim210_driver)
+CDS_CMD_ERR_CODE STIM210_set_normal_mode(STIM210_Driver* stim210_driver)
 {
-  DS_CMD_ERR_CODE ret;
+  CDS_CMD_ERR_CODE ret;
   char code[STIM210_TX_MAX_DATA_SIZE];
   uint8_t len = 0;
 
   strcpy(code, "x N");
   len = strlen(code);
 
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return DS_CMD_ILLEGAL_CONTEXT;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_SERVICE_MODE) return CDS_CMD_ILLEGAL_CONTEXT;
 
   ret = STIM210_send_cmd_(stim210_driver, len, code);
-  if (ret != DS_CMD_OK) return ret;
+  if (ret != CDS_CMD_OK) return ret;
 
   stim210_driver->info.operation_mode = STIM210_OPERATION_NORMAL_MODE;
 
@@ -459,54 +460,54 @@ C2A_MATH_ERROR STIM210_set_ang_vel_scale_factor_compo(STIM210_Driver* stim210_dr
  * @private
  * @brief ドライバ初期化設定
  * @param p_super: ドライバーへのポインタ
- * @return DS_ERR_CODEを参照
+ * @return CDS_ERR_CODEを参照
  */
-static DS_ERR_CODE STIM210_load_driver_super_init_settings_(DriverSuper* p_super)
+static CDS_ERR_CODE STIM210_load_driver_super_init_settings_(ComponentDriverSuper* p_super)
 {
-  DS_StreamConfig* stream_config;
+  CDS_StreamConfig* stream_config;
 
-  p_super->interface = UART;
+  p_super->hal_handler_id = HAL_HANDLER_ID_UART;
 
   // streamは0のみ
   stream_config = &(p_super->stream_config[STIM210_STREAM_TLM_CMD]);
 
-  DSC_set_rx_buffer_size_in_if_rx(p_super, DS_IF_RX_BUFFER_SIZE_STIM210);
+  CDSC_set_hal_rx_buffer_size(p_super, CDS_HAL_RX_BUFFER_SIZE_STIM210);
 
-  DSSC_enable(stream_config);
+  CDSSC_enable(stream_config);
 
   // 定期的な受信はするがフォーマットによって異なるので、STIM210_set_rec_frame_size_で設定する
 
-  DSSC_set_rx_header(stream_config, STIM210_rx_header_, STIM210_RX_HEADER_SIZE);
-  DSSC_set_data_analyzer(stream_config, STIM210_analyze_rec_data_);
+  CDSSC_set_rx_header(stream_config, STIM210_rx_header_, STIM210_RX_HEADER_SIZE);
+  CDSSC_set_data_analyzer(stream_config, STIM210_analyze_rec_data_);
 
-  return DS_ERR_CODE_OK;
+  return CDS_ERR_CODE_OK;
 }
 
 /*
  * @private
  * @brief テレメトリのフレームサイズとヘッダー・フッターを指定する関数。
  * @param stim210: ドライバーへのポインタ
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-static DS_CMD_ERR_CODE STIM210_set_rec_frame_size_(STIM210_Driver* stim210_driver)
+static CDS_CMD_ERR_CODE STIM210_set_rec_frame_size_(STIM210_Driver* stim210_driver)
 {
-  DS_StreamConfig* stream_config;
+  CDS_StreamConfig* stream_config;
   stream_config = &(stim210_driver->driver.super.stream_config[STIM210_STREAM_TLM_CMD]);
   // Headerはノーマルモードのフォーマットによって可変
   STIM210_rx_header_[0] = STIM210_normal_mode_format_idx_[(int8_t)stim210_driver->info.normal_mode_format];
 
   if (stim210_driver->info.termination_mode == STIM210_TERMINATION_CRLF)
   {
-    DSSC_set_rx_footer(stream_config, STIM210_rx_footer_crlf_, STIM210_RX_FOOTER_SIZE); // CRLFの時のみ
-    DSSC_set_rx_frame_size(stream_config, STIM210_normal_mode_rx_frame_size_crlf_[stim210_driver->info.normal_mode_format]);
+    CDSSC_set_rx_footer(stream_config, STIM210_rx_footer_crlf_, STIM210_RX_FOOTER_SIZE); // CRLFの時のみ
+    CDSSC_set_rx_frame_size(stream_config, STIM210_normal_mode_rx_frame_size_crlf_[stim210_driver->info.normal_mode_format]);
   }
   else
   {
-    DSSC_set_rx_footer(stream_config, STIM210_rx_footer_crlf_, STIM210_RX_FOOTER_NONE_SIZE); // CRLF OFFではフッターなし
-    DSSC_set_rx_frame_size(stream_config, STIM210_normal_mode_rx_frame_size_none_[stim210_driver->info.normal_mode_format]);
+    CDSSC_set_rx_footer(stream_config, STIM210_rx_footer_crlf_, STIM210_RX_FOOTER_NONE_SIZE); // CRLF OFFではフッターなし
+    CDSSC_set_rx_frame_size(stream_config, STIM210_normal_mode_rx_frame_size_none_[stim210_driver->info.normal_mode_format]);
   }
 
-  return DS_CMD_OK;
+  return CDS_CMD_OK;
 }
 
 /*
@@ -515,15 +516,15 @@ static DS_CMD_ERR_CODE STIM210_set_rec_frame_size_(STIM210_Driver* stim210_drive
  * @param stim210: ドライバーへのポインタ
  * @param param_size: cmd paramで使われているバイト長 (フッターを含まない)
  * @param cmd_param: 送信するコマンドパラメータ
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-static DS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t param_size, const char* cmd_param)
+static CDS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t param_size, const char* cmd_param)
 {
-  DS_StreamConfig* stream_config;
-  DS_ERR_CODE ret;
+  CDS_StreamConfig* stream_config;
+  CDS_ERR_CODE ret;
   uint8_t cmd[STIM210_TX_MAX_DATA_SIZE];
   uint8_t i = 0;
-  if (param_size + STIM210_TX_FOOTER_SIZE > STIM210_TX_MAX_DATA_SIZE) return DS_CMD_ILLEGAL_LENGTH;
+  if (param_size + STIM210_TX_FOOTER_SIZE > STIM210_TX_MAX_DATA_SIZE) return CDS_CMD_ILLEGAL_LENGTH;
 
   for (i = 0; i < param_size; i++)
   {
@@ -533,13 +534,13 @@ static DS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t
   cmd[param_size] = STIM210_tx_footer_[0]; // TXのフッターを追加
 
   stream_config = &(stim210_driver->driver.super.stream_config[STIM210_STREAM_TLM_CMD]);
-  DSSC_set_tx_frame_size(stream_config, param_size + STIM210_TX_FOOTER_SIZE);
-  DSSC_set_tx_frame(stream_config, cmd);
+  CDSSC_set_tx_frame_size(stream_config, param_size + STIM210_TX_FOOTER_SIZE);
+  CDSSC_set_tx_frame(stream_config, cmd);
 
-  ret = DS_send_general_cmd(&(stim210_driver->driver.super), STIM210_STREAM_TLM_CMD);
-  if (ret != DS_ERR_CODE_OK) return DS_CMD_DRIVER_SUPER_ERR;
+  ret = CDS_send_general_cmd(&(stim210_driver->driver.super), STIM210_STREAM_TLM_CMD);
+  if (ret != CDS_ERR_CODE_OK) return CDS_CMD_DRIVER_SUPER_ERR;
 
-  return DS_CMD_OK;
+  return CDS_CMD_OK;
 }
 
 /*
@@ -547,13 +548,13 @@ static DS_CMD_ERR_CODE STIM210_send_cmd_(STIM210_Driver* stim210_driver, uint8_t
  * @brief 受け取ったデータを変数に格納していく
  * @param stream_config: ドライバーの設定
  * @param p_driver: ドライバーへのポインタ
- * @return DS_ERR_CODEを参照
+ * @return CDS_ERR_CODEを参照
  */
-static DS_ERR_CODE STIM210_analyze_rec_data_(DS_StreamConfig* stream_config, void* p_driver)
+static CDS_ERR_CODE STIM210_analyze_rec_data_(CDS_StreamConfig* stream_config, void* p_driver)
 {
   uint8_t tlm_body_idx = 0;
   STIM210_Driver* stim210_driver = (STIM210_Driver*)p_driver;
-  const uint8_t* stim210_rx_data = DSSC_get_rx_frame(stream_config);
+  const uint8_t* stim210_rx_data = CDSSC_get_rx_frame(stream_config);
 
 #ifdef STIM210_DEBUG_SHOW_REC_DATA
   Printf("%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d \n",
@@ -562,7 +563,7 @@ static DS_ERR_CODE STIM210_analyze_rec_data_(DS_StreamConfig* stream_config, voi
     stim210_rx_data[12], stim210_rx_data[13], stim210_rx_data[14], stim210_rx_data[15], stim210_rx_data[16], stim210_rx_data[17],
     stim210_rx_data[18], stim210_rx_data[19], stim210_rx_data[20], stim210_rx_data[21], stim210_rx_data[22]);
 #endif
-  if (stim210_driver->info.operation_mode != STIM210_OPERATION_NORMAL_MODE) return DS_ERR_CODE_OK;
+  if (stim210_driver->info.operation_mode != STIM210_OPERATION_NORMAL_MODE) return CDS_ERR_CODE_OK;
 
   tlm_body_idx = STIM210_analyze_normal_mode_format_idx_(stim210_driver, stim210_rx_data, tlm_body_idx);
   tlm_body_idx = STIM210_analyze_gyro_output_(stim210_driver, stim210_rx_data, tlm_body_idx);
@@ -607,7 +608,7 @@ static DS_ERR_CODE STIM210_analyze_rec_data_(DS_StreamConfig* stream_config, voi
 
   tlm_body_idx = STIM210_analyze_crc_(stim210_driver, stim210_rx_data, tlm_body_idx);
 
-  return DS_ERR_CODE_OK;
+  return CDS_ERR_CODE_OK;
 }
 
 static int STIM210_analyze_normal_mode_format_idx_(STIM210_Driver* stim210_driver, const uint8_t* stim210_rx_data, uint8_t tlm_body_idx)

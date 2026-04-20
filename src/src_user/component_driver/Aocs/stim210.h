@@ -6,14 +6,14 @@
 #ifndef STIM210_H_
 #define STIM210_H_
 
-#include <src_core/IfWrapper/uart.h>
-#include <src_core/Drivers/Super/driver_super.h>
+#include <src_core/hal/uart.h>
+#include <src_core/component_driver/driver_super.h>
 
-#include <src_user/IfWrapper/GPIO.h>
-#include <src_user/Library/physical_constants.h>
-#include <src_user/Library/quaternion.h>
+#include <src_user/hal/GPIO.h>
+#include <src_user/library/physical_constants.h>
+#include <src_user/library/quaternion.h>
 
-#define DS_IF_RX_BUFFER_SIZE_STIM210 (32)  //!< IF_RXのバッファサイズ
+#define CDS_HAL_RX_BUFFER_SIZE_STIM210 (32)  //!< HAL_RXのバッファサイズ
 
 /**
  * @enum   STIM210_OPERATION_MODE
@@ -157,7 +157,7 @@ typedef struct
 {
   struct
   {
-    DriverSuper super;        //!< DriverSuper class
+    ComponentDriverSuper super;        //!< ComponentDriverSuper class
     UART_Config uart_config;  //!< UART class
     uint8_t ch_gpio_trig;     //!< GPIO port for external trigger
     uint8_t ch_gpio_reset;    //!< GPIO port for sending reset signal to STIM210
@@ -176,16 +176,13 @@ typedef struct
  * @param  ch_gpio_trig  : STIM210が接続されているテレメトリ送出信号送信用GPIOポート番号
  * @param  ch_gpio_reset : STIM210が接続されているReset信号送信用GPIOポート番号
  * @param  rx_buffer: 受信バッファ
- * @retval 0       : 正常終了
- * @retval 1       : DS 異常終了
- * @retval 2       : GPIO入出力設定異常終了
- * @retval 3       : GPIO初期化異常終了
+ * @return CDS_INIT_ERR_CODE
  */
-int STIM210_init(STIM210_Driver* stim210_driver,
-                 uint8_t ch,
-                 uint8_t ch_gpio_trig,
-                 uint8_t ch_gpio_reset,
-                 DS_StreamRecBuffer* rx_buffer);
+CDS_INIT_ERR_CODE STIM210_init(STIM210_Driver* stim210_driver,
+                               uint8_t ch,
+                               uint8_t ch_gpio_trig,
+                               uint8_t ch_gpio_reset,
+                               CDS_StreamRecBuffer* rx_buffer);
 
 /**
  * @brief  STIM210のパラメータを初期値にリセットする。
@@ -202,9 +199,9 @@ int STIM210_reset_param(STIM210_Driver* stim210_driver);
  *
  *         ノーマルモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
- * @retval DS_REC_ERR_CODEに準拠
+ * @retval CDS_REC_ERR_CODEに準拠
  */
-DS_REC_ERR_CODE STIM210_rec(STIM210_Driver* stim210_driver);
+CDS_REC_ERR_CODE STIM210_rec(STIM210_Driver* stim210_driver);
 
 /**
  * @brief  GPIOを用いたSTIM210のテレメ送信
@@ -229,9 +226,9 @@ int STIM210_reset_by_gpio(STIM210_Driver* stim210_driver);
  *
  *         ノーマルモードと初期モードで実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_service_mode(STIM210_Driver* stim210_driver);
+CDS_CMD_ERR_CODE STIM210_set_service_mode(STIM210_Driver* stim210_driver);
 
 /**
  * @brief  STIM210のノーマルモードでの出力フォーマットを変更する
@@ -239,17 +236,17 @@ DS_CMD_ERR_CODE STIM210_set_service_mode(STIM210_Driver* stim210_driver);
  *         サービスモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
  * @param  normal_mode_format : 出力フォーマット
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_normal_mode_format(STIM210_Driver* stim210_driver, STIM210_NORMAL_MODE_FORMAT normal_mode_format);
+CDS_CMD_ERR_CODE STIM210_set_normal_mode_format(STIM210_Driver* stim210_driver, STIM210_NORMAL_MODE_FORMAT normal_mode_format);
 
 /**
  * @brief  STIM210のノーマルモードのサンプルレートを変更する
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
  * @param  sample_rate : サンプルレート
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_SAMPLE_RATE sample_rate);
+CDS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_SAMPLE_RATE sample_rate);
 
 /**
  * @brief  STIM210のノーマルモードでのジャイロ出力を変更する
@@ -257,9 +254,9 @@ DS_CMD_ERR_CODE STIM210_set_sample_rate(STIM210_Driver* stim210_driver, STIM210_
  *         サービスモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
  * @param  gyro_output_mode : ジャイロ出力
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_GYRO_OUTPUT_MODE gyro_output_mode);
+CDS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_GYRO_OUTPUT_MODE gyro_output_mode);
 
 /**
  * @brief  STIM210のノーマルモードでの終端子を変更する
@@ -267,9 +264,9 @@ DS_CMD_ERR_CODE STIM210_set_gyro_output(STIM210_Driver* stim210_driver, STIM210_
  *         サービスモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
  * @param  gyro_termination_mode : 終端子
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STIM210_TERMINATION_MODE gyro_termination_mode);
+CDS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STIM210_TERMINATION_MODE gyro_termination_mode);
 
 /**
  * @brief  STIM210のLPFのカットオフ周波数を変更する
@@ -277,18 +274,18 @@ DS_CMD_ERR_CODE STIM210_set_termination_mode(STIM210_Driver* stim210_driver, STI
  *         サービスモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
  * @param  low_pass_filter_frequency : LPFのカットオフ周波数
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_low_pass_filter(STIM210_Driver* stim210_driver, STIM210_LPF low_pass_filter_frequency);
+CDS_CMD_ERR_CODE STIM210_set_low_pass_filter(STIM210_Driver* stim210_driver, STIM210_LPF low_pass_filter_frequency);
 
 /**
  * @brief  STIM210をノーマルモードに移行する
  *
  *         サービスモードのみ実行可能。それ以外の時は異常終了する。
  * @param  stim210_driver : STIM210_Driver構造体へのポインタ
- * @return DS_CMD_ERR_CODEを参照
+ * @return CDS_CMD_ERR_CODEを参照
  */
-DS_CMD_ERR_CODE STIM210_set_normal_mode(STIM210_Driver* stim210_driver);
+CDS_CMD_ERR_CODE STIM210_set_normal_mode(STIM210_Driver* stim210_driver);
 
 /**
  * @brief  座標変換行列設定関数
